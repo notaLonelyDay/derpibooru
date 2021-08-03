@@ -1,0 +1,3 @@
+rootProject.name = "derpibooru"
+include ':app'
+include ':api'

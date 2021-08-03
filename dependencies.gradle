@@ -1,0 +1,10 @@
+ext {
+    def retrofit_version = "2.9.0"
+    def moshi_version = "2.4.0"
+
+    networkDependencies = [
+            "com.squareup.retrofit2:retrofit:${retrofit_version}",
+            "com.squareup.retrofit2:converter-moshi:${moshi_version}",
+            "com.squareup.moshi:moshi-adapters:1.5.0"
+    ]
+}
