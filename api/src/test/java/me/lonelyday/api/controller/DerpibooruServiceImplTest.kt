@@ -16,4 +16,19 @@ class DerpibooruServiceImplTest {
         }
     }
 
+    @Test
+    fun searchTags() {
+        runBlocking {
+            service.searchTags("artist-colon-atryl", 0, 10)
+        }
+    }
+
+
+    @Test
+    fun fetchTag() {
+        runBlocking {
+            service.fetchTag("artist-colon-atryl")
+        }
+    }
+
 }

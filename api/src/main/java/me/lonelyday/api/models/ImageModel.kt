@@ -2,15 +2,13 @@ package me.lonelyday.api.models
 
 import com.squareup.moshi.Json
 import java.util.*
-import kotlin.collections.ArrayList
 
-// TODO: check if moshi can work with RFC3339 time
 data class ImageModel(
     @Json(name = "animated") val animated: Boolean,
     @Json(name = "aspect_ratio") val aspectRatio: Float,
     @Json(name = "comment_count") val commentCount: Int,
     @Json(name = "created_at") val createdAt: Date,
-    @Json(name = "deletion_reason") val deletion_reason: String?,
+    @Json(name = "deletion_reason") val deletionReason: String?,
     @Json(name = "description") val description: String,
     @Json(name = "downvotes") val downvotes: Int,
     @Json(name = "duplicate_of") val duplicate_of: Int?,
@@ -47,7 +45,7 @@ data class ImageModel(
     @Json(name = "wilson_score") val wilson_score: Float,
 )
 
-data class ImageSearchModel(
+data class SearchImagesResponse(
     @Json(name = "images") val images: List<ImageModel>,
 //    TODO: check what is interactions
 //    @Json(name = "interactions") val interactions: List<Int>,

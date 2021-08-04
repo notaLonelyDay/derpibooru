@@ -1,9 +1,8 @@
 package me.lonelyday.api.interfaces
 
-import androidx.lifecycle.LiveData
-import kotlinx.coroutines.flow.Flow
-import me.lonelyday.api.models.ImageSearchModel
-import retrofit2.Call
+import me.lonelyday.api.models.SearchImagesResponse
+import me.lonelyday.api.models.SearchTagsResponse
+import me.lonelyday.api.models.TagResponse
 
 interface DerpibooruService {
     suspend fun searchImages(
@@ -12,5 +11,13 @@ interface DerpibooruService {
         perPage: Int,
         sortDirection: String? = null,
         sortField: String? = null
-    ): ImageSearchModel
+    ): SearchImagesResponse
+
+    suspend fun searchTags(
+        query: String,
+        page: Int? = null,
+        perPage: Int? = null
+    ): SearchTagsResponse
+
+    suspend fun fetchTag(slug: String): TagResponse
 }
