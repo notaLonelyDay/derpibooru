@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.lonelyday.derpibooru" >
+    package="me.lonelyday.derpibooru">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
+        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Derpibooru.NoActionBar" >
+        android:theme="@style/Theme.Derpibooru.NoActionBar">
         <activity
             android:name=".ui.MainActivity"
             android:exported="true" />
         <activity
             android:name=".ui.SplashScreenActivity"
             android:exported="true"
-            android:theme="@style/SplashTheme" >
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

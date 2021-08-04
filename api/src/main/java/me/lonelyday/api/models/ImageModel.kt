@@ -25,8 +25,7 @@ data class ImageModel(
     @Json(name = "name") val name: String,
     @Json(name = "orig_sha512_hash") val orig_sha512_hash: String,
     @Json(name = "processed") val processed: Boolean,
-    // TODO: 8/1/21 what is representations
-//    @Json(name = "representations") val representations: Object?,
+    @Json(name = "representations") val representations: Map<String, String>,
     @Json(name = "score") val score: Int,
     @Json(name = "sha512_hash") val sha512_hash: String,
     @Json(name = "size") val size: Int,

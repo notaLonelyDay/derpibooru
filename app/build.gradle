@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         google()
+        mavenCentral()
     }
     dependencies {
         def nav_version = "2.3.5"
@@ -26,6 +27,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -50,7 +53,11 @@ android {
 }
 
 
+apply from: '../dependencies.gradle'
 dependencies {
+
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
@@ -59,6 +66,11 @@ dependencies {
     implementation "androidx.core:core-ktx:1.6.0"
     implementation 'androidx.room:room-ktx:2.2.6'
     implementation "androidx.collection:collection-ktx:"
+    def paging_version = "3.0.1"
+
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
+    implementation networkDependencies
 
     def nav_version = "2.3.5"
 
@@ -66,6 +78,10 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
+
+    def multidex_version = "2.0.1"
+    implementation "androidx.multidex:multidex:$multidex_version"
+
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'
