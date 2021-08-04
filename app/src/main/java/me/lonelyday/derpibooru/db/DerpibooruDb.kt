@@ -1,7 +1,8 @@
 package me.lonelyday.derpibooru.db
 
 import androidx.room.Database
-import me.lonelyday.derpibooru.db.dao.ImageDao
+import androidx.room.RoomDatabase
+import me.lonelyday.derpibooru.db.dao.MainDao
 import me.lonelyday.derpibooru.db.vo.Image
 
 
@@ -9,6 +10,6 @@ import me.lonelyday.derpibooru.db.vo.Image
     entities = [Image::class],
     version = 1
 )
-abstract class DerpibooruDb() {
-    abstract fun imageDao(): ImageDao
+abstract class DerpibooruDb: RoomDatabase() {
+    abstract fun mainDao(): MainDao
 }

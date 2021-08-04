@@ -1,8 +1,10 @@
 package me.lonelyday.derpibooru.db.vo
 
 import androidx.room.ColumnInfo
+import androidx.room.Entity
 import me.lonelyday.api.models.TagModel
 
+@Entity
 data class Tag(
     @ColumnInfo(name = "aliased_tag") val aliasedTag: String?,
     @ColumnInfo(name = "aliases") val aliases: List<String>,

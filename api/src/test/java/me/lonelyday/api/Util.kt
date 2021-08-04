@@ -13,6 +13,6 @@ fun getOkHttpClient(): OkHttpClient {
         .build()
 }
 
-fun getRestController(): RestController {
+public fun getRestController(): RestController {
     return RestController(getOkHttpClient(), "https://derpibooru.org/api/v1/json/")
 }
