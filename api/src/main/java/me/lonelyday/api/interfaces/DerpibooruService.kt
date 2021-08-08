@@ -1,16 +1,18 @@
 package me.lonelyday.api.interfaces
 
-import me.lonelyday.api.models.SearchImagesResponse
-import me.lonelyday.api.models.SearchTagsResponse
-import me.lonelyday.api.models.TagResponse
+import me.lonelyday.api.models.*
 
 interface DerpibooruService {
+    var filterId: Int?
+    var key: String?
+
+    suspend fun featuredImage(): FeaturedImageResponse
+
+
     suspend fun searchImages(
-        query: String,
+        query: Query,
         page: Int,
         perPage: Int,
-        sortDirection: String? = null,
-        sortField: String? = null
     ): SearchImagesResponse
 
     suspend fun searchTags(

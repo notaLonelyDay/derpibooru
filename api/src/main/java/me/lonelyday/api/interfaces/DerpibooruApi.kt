@@ -1,5 +1,6 @@
 package me.lonelyday.api.interfaces
 
+import me.lonelyday.api.models.FeaturedImageResponse
 import me.lonelyday.api.models.SearchImagesResponse
 import me.lonelyday.api.models.SearchTagsResponse
 import me.lonelyday.api.models.TagResponse
@@ -8,6 +9,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface DerpibooruApi {
+    @GET("images/featured")
+    suspend fun featuredImage(): FeaturedImageResponse
+
     @GET("search/images")
     suspend fun searchImages(
         @Query("key") key: String?,

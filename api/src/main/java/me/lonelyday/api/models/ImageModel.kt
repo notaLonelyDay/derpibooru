@@ -50,3 +50,8 @@ data class SearchImagesResponse(
 //    @Json(name = "interactions") val interactions: List<Int>,
     @Json(name = "total") val total: Int,
 )
+
+data class FeaturedImageResponse(
+    @Json(name = "image") val image: ImageModel,
+//TODO    @Json(name = "interactions") val interactions: List<Int>,
+)

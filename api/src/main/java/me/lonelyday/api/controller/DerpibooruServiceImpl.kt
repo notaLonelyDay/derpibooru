@@ -2,32 +2,30 @@ package me.lonelyday.api.controller
 
 import me.lonelyday.api.interfaces.DerpibooruApi
 import me.lonelyday.api.interfaces.DerpibooruService
-import me.lonelyday.api.models.SearchImagesResponse
-import me.lonelyday.api.models.SearchTagsResponse
-import me.lonelyday.api.models.TagResponse
+import me.lonelyday.api.models.*
 
 class DerpibooruServiceImpl(
     private val api: DerpibooruApi
 ) : DerpibooruService {
-    var filterId: Int? = null
-    var key: String? = null
 
+    override var filterId: Int? = null
+    override var key: String? = null
+
+    override suspend fun featuredImage() = api.featuredImage()
 
     override suspend fun searchImages(
-        query: String,
+        query: Query,
         page: Int,
-        perPage: Int,
-        sortDirection: String?,
-        sortField: String?
+        perPage: Int
     ): SearchImagesResponse {
         return api.searchImages(
             key = key,
             filterId = filterId,
             page = page,
             perPage = perPage,
-            query = query,
-            sortDirection = sortDirection,
-            sortField = sortField,
+            query = query.string,
+            sortDirection = query.sortDirection?.name,
+            sortField = query.sortField?.name,
         )
     }
 
