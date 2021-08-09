@@ -8,7 +8,7 @@ apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "30.0.0"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "me.lonelyday.derpibooru"
@@ -46,6 +46,7 @@ android {
 apply from: '../dependencies.gradle'
 dependencies {
     def nav_version = "2.3.5"
+
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"

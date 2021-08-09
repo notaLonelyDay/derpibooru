@@ -1,13 +1,18 @@
 package me.lonelyday.derpibooru.ui.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.databinding.FragmentSearchBinding
 import me.lonelyday.derpibooru.databinding.FragmentSearchQueryBinding
@@ -27,5 +32,13 @@ class SearchQueryFragment : Fragment() {
     ): View {
         _binding = FragmentSearchQueryBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.queryText.addTextChangedListener{
+            querySharedViewModel.query.value = Query(it.toString())
+        }
     }
 }
