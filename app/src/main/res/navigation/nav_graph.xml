@@ -11,17 +11,12 @@
         android:label="Search"
         tools:layout="@layout/fragment_search">
         <action
-            android:id="@+id/action_searchFragment_to_searchSuggestionsFragment"
-            app:destination="@id/searchSuggestionsFragment" />
+            android:id="@+id/action_searchFragment_to_preferencesFragment"
+            app:destination="@id/preferencesFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchSuggestionsFragment"
-        android:name="me.lonelyday.derpibooru.ui.search.SearchSuggestionsFragment"
-        android:label="fragment_search_suggestions"
-        tools:layout="@layout/fragment_search_suggestions" />
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="me.lonelyday.derpibooru.ui.settings.SettingsFragment"
-        android:label="Settings"
-        tools:layout="@layout/fragment_settings" />
+        android:id="@+id/preferencesFragment"
+        android:name="me.lonelyday.derpibooru.ui.preferences.PreferencesFragment"
+        android:label="PreferencesFragment" />
+
 </navigation>

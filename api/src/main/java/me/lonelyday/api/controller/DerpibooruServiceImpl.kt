@@ -3,6 +3,7 @@ package me.lonelyday.api.controller
 import me.lonelyday.api.interfaces.DerpibooruApi
 import me.lonelyday.api.interfaces.DerpibooruService
 import me.lonelyday.api.models.*
+import retrofit2.HttpException
 
 class DerpibooruServiceImpl(
     private val api: DerpibooruApi
@@ -41,5 +42,20 @@ class DerpibooruServiceImpl(
         return api.fetchTag(slug = slug)
     }
 
+    override suspend fun fetchFiltersUser(page: Int?): FiltersResponse {
+        return api.fetchFiltersUser(key = key, page = page)
+    }
+
+    override suspend fun checkKey(key: String, page: Int?): Boolean {
+        return try {
+            api.fetchFiltersUserRaw(key, page)
+            true
+        } catch (exception: HttpException){
+            if(exception.code() == 403)
+                false
+            else
+                throw exception
+        }
+    }
 
 }

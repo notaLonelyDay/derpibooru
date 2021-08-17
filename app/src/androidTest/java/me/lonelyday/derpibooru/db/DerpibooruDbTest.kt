@@ -35,7 +35,7 @@ class DerpibooruDbTest {
     @Test
     fun mainDao() =
         runBlocking {
-            val mainDao = db.mainDao()
+            val mainDao = db.imageDao()
 
             val images = service.searchImages("safe", 0, 20)
         }

@@ -1,15 +1,12 @@
 package me.lonelyday.derpibooru.ui.search
 
 
-import android.R.attr
 import android.os.Bundle
 import android.view.*
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -17,8 +14,6 @@ import kotlinx.coroutines.launch
 import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.databinding.FragmentSearchBinding
-import android.R.attr.y
-import androidx.fragment.app.activityViewModels
 
 
 private const val SEARCH_QUERY = "search_query"
@@ -31,7 +26,7 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<SearchViewModel>()
-    val querySharedViewModel by activityViewModels<SearchQuerySharedViewModel>()
+    private val querySharedViewModel by activityViewModels<SearchQuerySharedViewModel>()
 
     private lateinit var adapter: ImagesAdapter
 
@@ -75,7 +70,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        val glide = Glide.with(this)
         adapter = ImagesAdapter(requireContext())
         binding.recyclerList.adapter = adapter
 

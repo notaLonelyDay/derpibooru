@@ -22,4 +22,8 @@ interface DerpibooruService {
     ): SearchTagsResponse
 
     suspend fun fetchTag(slug: String): TagResponse
+
+    suspend fun fetchFiltersUser(page: Int? = null): FiltersResponse
+
+    suspend fun checkKey(key: String, page: Int? = null): Boolean
 }

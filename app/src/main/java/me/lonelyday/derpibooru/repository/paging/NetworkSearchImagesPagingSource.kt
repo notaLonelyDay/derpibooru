@@ -2,16 +2,14 @@ package me.lonelyday.derpibooru.repository.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import me.lonelyday.api.interfaces.DerpibooruService
 import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.db.vo.Image
-import me.lonelyday.derpibooru.db.vo.toImage
-import me.lonelyday.derpibooru.repository.ImagesRepository
+import me.lonelyday.derpibooru.repository.Repository
 import retrofit2.HttpException
 import java.io.IOException
 
 class NetworkSearchImagesPagingSource(
-    private val repoImages: ImagesRepository,
+    private val repo: Repository,
     private val query: Query
 ) : PagingSource<Int, Image>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Image> {
@@ -21,7 +19,7 @@ class NetworkSearchImagesPagingSource(
             val prev = if (key != 0) key - 1 else null
 
 
-            val data = repoImages.searchImages(query, key, params.loadSize)
+            val data = repo.searchImages(query, key, params.loadSize)
 
             return LoadResult.Page(
                 data = data,

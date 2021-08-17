@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import me.lonelyday.derpibooru.db.vo.Image
 
 @Dao
-interface MainDao {
+interface ImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg images: Image)

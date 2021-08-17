@@ -1,8 +1,6 @@
 package me.lonelyday.derpibooru.db.vo
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import me.lonelyday.api.models.ImageModel
 import java.util.*
 
@@ -14,14 +12,14 @@ data class Image(
     @ColumnInfo(name = "animated") val animated: Boolean,
     @ColumnInfo(name = "aspect_ratio") val aspectRatio: Float,
     @ColumnInfo(name = "comment_count") val commentCount: Int,
-    @ColumnInfo(name = "created_at") val createdAt: Date?,
+    @ColumnInfo(name = "created_at") val createdAt: Long?,
     @ColumnInfo(name = "deletion_reason") val deletion_reason: String?,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "downvotes") val downvotes: Int,
     @ColumnInfo(name = "duplicate_of") val duplicate_of: Int?,
     @ColumnInfo(name = "duration") val duration: Float,
     @ColumnInfo(name = "faves") val faves: Int,
-    @ColumnInfo(name = "first_seen_at") val first_seen_at: Date,
+    @ColumnInfo(name = "first_seen_at") val first_seen_at: Long,
     @ColumnInfo(name = "format") val format: String,
     @ColumnInfo(name = "height") val height: Int,
     @ColumnInfo(name = "hidden_from_users") val hidden_from_users: Boolean,
@@ -39,16 +37,19 @@ data class Image(
     @ColumnInfo(name = "spoilered") val spoilered: Boolean,
     @ColumnInfo(name = "tag_count") val tag_count: Int,
     @ColumnInfo(name = "tag_ids") val tag_ids: List<Int>,
-    @ColumnInfo(name = "tags") val tags: List<String>,
+    @ColumnInfo(name = "tag_names") val tag_names: List<String>,
     @ColumnInfo(name = "thumbnails_generated") val thumbnails_generated: Boolean,
-    @ColumnInfo(name = "updated_at") val updated_at: Date,
+    @ColumnInfo(name = "updated_at") val updated_at: Long,
     @ColumnInfo(name = "uploader") val uploader: String?,
     @ColumnInfo(name = "uploader_id") val uploader_id: Int?,
     @ColumnInfo(name = "upvotes") val upvotes: Int,
     @ColumnInfo(name = "view_url") val view_url: String,
     @ColumnInfo(name = "width") val width: Int,
     @ColumnInfo(name = "wilson_score") val wilson_score: Float,
-)
+){
+    @Ignore
+    var tags: List<Tag> = emptyList()
+}
 
 fun ImageModel.toImage(): Image {
     return Image(
@@ -56,14 +57,14 @@ fun ImageModel.toImage(): Image {
         animated = this.animated,
         aspectRatio = this.aspectRatio,
         commentCount = this.commentCount,
-        createdAt = this.createdAt,
+        createdAt = this.createdAt?.time,
         deletion_reason = this.deletionReason,
         description = this.description,
         downvotes = this.downvotes,
         duplicate_of = this.duplicate_of,
         duration = this.duration,
         faves = this.faves,
-        first_seen_at = this.first_seen_at,
+        first_seen_at = this.first_seen_at?.time,
         format = this.format,
         height = this.height,
         hidden_from_users = this.hidden_from_users,
@@ -79,9 +80,9 @@ fun ImageModel.toImage(): Image {
         spoilered = this.spoilered,
         tag_count = this.tag_count,
         tag_ids = this.tag_ids,
-        tags = this.tags,
+        tag_names = this.tags,
         thumbnails_generated = this.thumbnails_generated,
-        updated_at = this.updated_at,
+        updated_at = this.updated_at.time,
         uploader = this.uploader,
         uploader_id = this.uploader_id,
         upvotes = this.upvotes,

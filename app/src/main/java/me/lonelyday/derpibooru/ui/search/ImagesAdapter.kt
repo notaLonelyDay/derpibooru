@@ -52,14 +52,6 @@ class ImagesAdapter(private val context: Context) :
             .into(image)
     }
 
-    override fun onBindViewHolder(
-        holder: ImageViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
-    ) {
-        super.onBindViewHolder(holder, position, payloads)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_search, parent, false)

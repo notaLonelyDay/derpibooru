@@ -1,6 +1,8 @@
 package me.lonelyday.derpibooru.di
 
 import android.content.Context
+import androidx.preference.PreferenceManager
+import androidx.room.Room
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Rfc3339DateJsonAdapter
 import dagger.Module
@@ -13,7 +15,8 @@ import me.lonelyday.api.interfaces.DerpibooruApi
 import me.lonelyday.api.interfaces.DerpibooruService
 import me.lonelyday.derpibooru.APP_PREFERENCES
 import me.lonelyday.derpibooru.BASE_URL
-import me.lonelyday.derpibooru.repository.ImagesRepository
+import me.lonelyday.derpibooru.db.DerpibooruDb
+import me.lonelyday.derpibooru.repository.Repository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -65,17 +68,29 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideImagesRepository(
+    fun provideRepository(
+        database: DerpibooruDb,
         service: DerpibooruService,
         @ApplicationContext appContext: Context
-    ): ImagesRepository {
-        val sharedPreferences =
-            appContext.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
-        return ImagesRepository(
+    ): Repository {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(appContext)
+        return Repository(
+            database,
             service,
             sharedPreferences
         )
     }
 
+    @Singleton
+    @Provides
+    fun provideDatabase(
+        @ApplicationContext appContext: Context
+    ): DerpibooruDb {
+        return Room.databaseBuilder(
+            appContext,
+            DerpibooruDb::class.java,
+            "database"
+        ).build()
+    }
 
 }

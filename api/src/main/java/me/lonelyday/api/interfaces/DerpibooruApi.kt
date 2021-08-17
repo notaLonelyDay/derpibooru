@@ -1,9 +1,7 @@
 package me.lonelyday.api.interfaces
 
-import me.lonelyday.api.models.FeaturedImageResponse
-import me.lonelyday.api.models.SearchImagesResponse
-import me.lonelyday.api.models.SearchTagsResponse
-import me.lonelyday.api.models.TagResponse
+import me.lonelyday.api.models.*
+import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -32,4 +30,17 @@ interface DerpibooruApi {
 
     @GET("tags/{slug}")
     suspend fun fetchTag(@Path("slug") slug: String): TagResponse
+
+    @GET("filters/user")
+    suspend fun fetchFiltersUser(
+        @Query("key") key: String?,
+        @Query("page") page: Int?,
+    ): FiltersResponse
+
+    @GET("filters/user")
+    suspend fun fetchFiltersUserRaw(
+        @Query("key") key: String?,
+        @Query("page") page: Int?,
+    ): ResponseBody
+
 }
