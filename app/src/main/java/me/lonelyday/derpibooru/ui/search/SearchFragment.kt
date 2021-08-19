@@ -70,7 +70,10 @@ class SearchFragment : Fragment() {
 
     private fun initAdapter() {
         adapter = ImagesAdapter(requireContext())
-        binding.recyclerList.adapter = adapter
+        binding.recyclerList.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = SearchLoadStateAdapter(adapter),
+            footer = SearchLoadStateAdapter(adapter)
+        )
         binding.swipeRefresh.setOnRefreshListener { adapter.refresh() }
 
         lifecycleScope.launchWhenCreated {
