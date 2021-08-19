@@ -1,10 +1,15 @@
 package me.lonelyday.api.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+
+@Parcelize
 data class Query(
     val string: String,
     val sortField: SortField? = null,
     val sortDirection: SortDirection? = null,
-)
+): Parcelable
 
 enum class SortField(
     value: String,

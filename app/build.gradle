@@ -1,14 +1,21 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id "kotlin-kapt"
+    id "dagger.hilt.android.plugin"
 }
-
-apply plugin: 'kotlin-kapt'
-apply plugin: 'dagger.hilt.android.plugin'
+//sourceSets {
+//    all {
+//        languageSettings {
+//            useExperimentalAnnotation('me.lonelyday.derpibooru.OptInAnnotation')
+//        }
+//    }
+//}
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
+
 
     defaultConfig {
         applicationId "me.lonelyday.derpibooru"
@@ -40,11 +47,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
 
 
 apply from: '../dependencies.gradle'
 dependencies {
+    implementation "androidx.core:core-ktx:1.6.0"
+
     def nav_version = "2.3.5"
     def room_version = "2.3.0"
 
@@ -73,10 +83,7 @@ dependencies {
     implementation("androidx.room:room-paging:2.4.0-alpha04")
 
 
-
-
     implementation "androidx.preference:preference-ktx:1.1.1"
-
 
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -97,7 +104,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation project(path: ':api')
-    implementation "androidx.core:core-ktx:1.6.0"
     implementation 'androidx.room:room-ktx:2.3.0'
     implementation "androidx.collection:collection-ktx:"
     def paging_version = "3.0.1"
@@ -105,6 +111,8 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     implementation networkDependencies
+
+    implementation "androidx.core:core-ktx:1.6.0"
 
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -117,11 +125,11 @@ dependencies {
 
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.6.0'
+
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
