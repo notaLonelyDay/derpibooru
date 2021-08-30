@@ -62,7 +62,7 @@ open class Repository(
         val response = service.searchImages(query, page, perPage)
         return response.images.map {
             val image = it.toImage()
-            addTags(image)
+//            addTags(image)
 
             image
         }

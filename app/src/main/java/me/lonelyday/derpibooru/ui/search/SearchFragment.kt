@@ -2,15 +2,16 @@ package me.lonelyday.derpibooru.ui.search
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.databinding.FragmentSearchBinding
@@ -29,8 +30,6 @@ class SearchFragment : Fragment() {
     private val querySharedViewModel by activityViewModels<SearchQuerySharedViewModel>()
 
     private lateinit var adapter: ImagesAdapter
-
-    private var mainJob: Job? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,23 +70,26 @@ class SearchFragment : Fragment() {
 
     private fun initAdapter() {
         adapter = ImagesAdapter(requireContext())
-        binding.recyclerList.adapter = adapter
+        binding.recyclerList.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = SearchLoadStateAdapter(adapter),
+            footer = SearchLoadStateAdapter(adapter)
+        )
+        binding.swipeRefresh.setOnRefreshListener { adapter.refresh() }
 
-    }
-
-    private fun submitQuery(query: Query){
-        viewLifecycleOwner.lifecycleScope.launch {
-            mainJob?.let {
-                it.cancel()
-                it.join()
-            }
-
-            mainJob = viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.getImagesPagingDataFlow(query).collectLatest {
-                    adapter.submitData(it)
-                }
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest { loadStates ->
+                binding.swipeRefresh.isRefreshing = loadStates.refresh is LoadState.Loading
             }
         }
 
+        lifecycleScope.launchWhenCreated {
+            viewModel.images.collectLatest {
+                adapter.submitData(it)
+            }
+        }
+    }
+
+    private fun submitQuery(query: Query) {
+        viewModel.submitQuery(query)
     }
 }
