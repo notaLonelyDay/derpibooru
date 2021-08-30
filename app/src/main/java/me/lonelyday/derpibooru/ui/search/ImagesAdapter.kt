@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
-import android.service.autofill.TextValueSanitizer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
@@ -24,6 +24,8 @@ import me.lonelyday.derpibooru.ui.ImageDiffUtilItemCallback
 
 import com.bumptech.glide.Glide
 import me.lonelyday.derpibooru.databinding.ItemSearchBinding
+import me.lonelyday.derpibooru.db.vo.Tag
+import kotlin.properties.Delegates
 
 
 class ImagesAdapter(private val context: Context) :
@@ -58,6 +60,8 @@ class ImageViewHolder(
     private val imageView = binding.image
     private val artistsAdapter = (binding.artists.adapter as? ListAdapter<String, *>?)
 
+    var tagsRowHeight: Int? = null
+
 
     fun bindTo(image: Image) {
         bindImage(image)
@@ -76,6 +80,47 @@ class ImageViewHolder(
         binding.format.text = image.format
         binding.size.text = image.size.toString()
         binding.description.text = image.description
+        bindTags(image.tag_names zip image.tag_ids)
+    }
+
+    private fun bindTags(tags: List<Pair<String, Int>>) {
+        // inflating tags
+        binding.tags.removeAllViews()
+        for ((text, id) in tags) {
+            val tagView = LayoutInflater.from(context)
+                .inflate(R.layout.item_search_tag_item, binding.tags, false)
+            tagView.findViewById<TextView>(R.id.tag).text = text
+            binding.tags.addView(tagView)
+        }
+
+        if (tagsRowHeight != null) {
+            binding.tags.layoutParams.height = tagsRowHeight!!
+        } else
+            binding.tags.viewTreeObserver.addOnPreDrawListener(object :
+                ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    binding.tags.viewTreeObserver.removeOnPreDrawListener(this)
+                    tagsRowHeight = binding.tags.findViewById<View>(R.id.tagContainer)!!.measuredHeight
+                    binding.tags.layoutParams.height = tagsRowHeight!!
+                    return false
+                }
+            })
+        binding.tags.setOnClickListener {
+            it.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            it.requestLayout()
+//            it.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+//                override fun onPreDraw(): Boolean {
+//                    it.viewTreeObserver.removeOnPreDrawListener(this)
+//                    ObjectAnimator.ofInt(binding.tags.layoutParams, "height", 50, 100)
+//                        .apply {
+//                            duration = 1000
+//                            start()
+//                        }
+//                    Log.d("tea", "bindTo: ${binding.tags.measuredHeight}")
+//                    return false
+//                }
+//            })
+        }
     }
 
     private fun bindImage(image: Image) {
@@ -99,10 +144,10 @@ class ImageViewHolder(
         )
 
         Glide.with(imageView)
-            .load(image.representations["large"])
+            .load(image.representations["tall"])
             .thumbnail(
-                Glide.with(imageView)
-                    .load(image.representations["thumb_tiny"])
+//                Glide.with(imageView)
+//                    .load(image.representations["thumb_tiny"])
             )
             .placeholder(placeholder)
             .priority(Priority.IMMEDIATE)
@@ -118,7 +163,7 @@ class ArtistsAdapter :
 
     override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
         val item = getItem(position) ?: return
-        holder.itemView.findViewById<TextView>(R.id.artist)?.let {
+        holder.view.findViewById<TextView>(R.id.artist)?.let {
             it.text = item
         }
     }
@@ -130,4 +175,4 @@ class ArtistsAdapter :
     }
 }
 
-class ArtistViewHolder(view: View) : RecyclerView.ViewHolder(view)
+class ArtistViewHolder(val view: View) : RecyclerView.ViewHolder(view)
