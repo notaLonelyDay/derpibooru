@@ -22,7 +22,7 @@
         <entry key="app/src/main/res/layout/fragment_search_query.xml" value="0.15324074074074073" />
         <entry key="app/src/main/res/layout/fragment_search_suggestions.xml" value="0.16197916666666667" />
         <entry key="app/src/main/res/layout/frament_search.xml" value="0.30104166666666665" />
-        <entry key="app/src/main/res/layout/item_search.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/item_search.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_search_artist_item.xml" value="1.0" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.16510416666666666" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.30104166666666665" />
