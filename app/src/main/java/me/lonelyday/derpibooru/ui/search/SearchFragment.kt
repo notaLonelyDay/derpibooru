@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -87,6 +88,32 @@ class SearchFragment : Fragment() {
                 adapter.submitData(it)
             }
         }
+
+        binding.recyclerList.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            var check_ScrollingUp = false
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    // Scrolling up
+                    if(check_ScrollingUp)
+                    {
+                        YourView.startAnimation(AnimationUtils.loadAnimation(context,R.anim.trans_downwards));
+                        check_ScrollingUp = false;
+                    }
+
+                } else {
+                    // User scrolls down
+                    if(!check_ScrollingUp )
+                    {
+                        YourView
+                            .startAnimation(AnimationUtils
+                                .loadAnimation(context,R.anim.trans_upwards));
+                        check_ScrollingUp = true;
+
+                    }
+                }
+            }
+        })
     }
 
     private fun submitQuery(query: Query) {

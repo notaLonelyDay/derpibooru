@@ -17,15 +17,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable.DEFAULT
+import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import me.lonelyday.derpibooru.R
+import me.lonelyday.derpibooru.databinding.ItemSearchBinding
 import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.ui.ImageDiffUtilItemCallback
-
-import com.bumptech.glide.Glide
-import me.lonelyday.derpibooru.databinding.ItemSearchBinding
-import me.lonelyday.derpibooru.db.vo.Tag
-import kotlin.properties.Delegates
 
 
 class ImagesAdapter(private val context: Context) :
