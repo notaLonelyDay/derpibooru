@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -90,28 +91,18 @@ class SearchFragment : Fragment() {
             }
         }
 
-        binding.recyclerList.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            var check_ScrollingUp = false
+        binding.recyclerList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+                if (binding.searchQueryFragment.animation?.hasEnded() == false)
+                    return
                 if (dy > 0) {
                     // Scrolling up
-                    if(check_ScrollingUp)
-                    {
-                        YourView.startAnimation(AnimationUtils.loadAnimation(context,R.anim.trans_downwards));
-                        check_ScrollingUp = false;
-                    }
+                    binding.searchQueryFragment.isVisible = true
 
                 } else {
                     // User scrolls down
-                    if(!check_ScrollingUp )
-                    {
-                        YourView
-                            .startAnimation(AnimationUtils
-                                .loadAnimation(context,R.anim.trans_upwards));
-                        check_ScrollingUp = true;
-
-                    }
+                    binding.searchQueryFragment.isVisible = false
                 }
             }
         })

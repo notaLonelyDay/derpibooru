@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.search.SearchFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/searchQueryFragment"
+        android:name="me.lonelyday.derpibooru.ui.search.SearchQueryFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/searchQueryFragment"
-            android:name="me.lonelyday.derpibooru.ui.search.SearchQueryFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
-            tools:layout="@layout/fragment_search_query" />
-    </com.google.android.material.appbar.AppBarLayout>
+        tools:layout="@layout/fragment_search_query" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
@@ -40,4 +32,4 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </FrameLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>
