@@ -91,19 +91,23 @@ class SearchFragment : Fragment() {
             }
         }
 
+
         binding.recyclerList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (binding.searchQueryFragment.animation?.hasEnded() == false)
-                    return
-                if (dy > 0) {
-                    // Scrolling up
-                    binding.searchQueryFragment.isVisible = true
+//                if (binding.searchQueryFragment.animation?.hasEnded() == false)
+//                    return
+                binding.searchQueryFragment.isVisible = dy < 0
+//                val translationY =
+//                    if (dy > 0){
+//                        binding.searchQueryFragment.height.toFloat() * -1
+//                    }
+//                    else {0.0}
+//                binding.searchQueryFragment.animate()
+//                    .translationY(translationY.toFloat())
+//                    .setDuration(40)
+//                    .start()
 
-                } else {
-                    // User scrolls down
-                    binding.searchQueryFragment.isVisible = false
-                }
             }
         })
     }
