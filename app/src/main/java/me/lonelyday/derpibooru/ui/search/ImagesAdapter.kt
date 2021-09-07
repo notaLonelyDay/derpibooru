@@ -97,7 +97,8 @@ class ImageViewHolder(
                 ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     binding.tags.viewTreeObserver.removeOnPreDrawListener(this)
-                    tagsRowHeight = binding.tags.findViewById<View>(R.id.tagContainer)!!.measuredHeight
+                    tagsRowHeight =
+                        binding.tags.findViewById<View>(R.id.tagContainer)!!.measuredHeight
                     binding.tags.layoutParams.height = tagsRowHeight!!
                     return false
                 }
@@ -141,7 +142,10 @@ class ImageViewHolder(
         )
 
         Glide.with(imageView)
-            .load(image.representations["tall"])
+            .load(
+//                image.representations["tall"]
+                null as String?
+            )
             .thumbnail(
 //                Glide.with(imageView)
 //                    .load(image.representations["thumb_tiny"])
