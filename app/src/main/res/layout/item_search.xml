@@ -170,11 +170,32 @@
 
     </LinearLayout>
 
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/tags"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        app:flexWrap="wrap"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/tags"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            app:flexWrap="wrap"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tagsExpander"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_flexGrow="1" />
+
+        <ImageView
+            android:id="@+id/tagsExpander"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_down"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/description"

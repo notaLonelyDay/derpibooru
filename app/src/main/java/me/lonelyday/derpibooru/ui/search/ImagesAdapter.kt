@@ -102,9 +102,9 @@ class ImageViewHolder(
                     return false
                 }
             })
-        binding.tags.setOnClickListener {
-            it.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            it.requestLayout()
+        binding.tagsExpander.setOnClickListener {
+            binding.tags.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            binding.tags.requestLayout()
 //            it.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
 //                override fun onPreDraw(): Boolean {
 //                    it.viewTreeObserver.removeOnPreDrawListener(this)
