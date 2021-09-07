@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import me.lonelyday.derpibooru.DerpibooruApplication
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.databinding.ActivityMainBinding
 import me.lonelyday.derpibooru.ui.search.SearchQuerySharedViewModel
@@ -31,6 +32,8 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         setUpNavigation()
+
+        (applicationContext as DerpibooruApplication).createRequestPermissionLauncher(this)
 
     }
 
