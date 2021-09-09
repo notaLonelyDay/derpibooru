@@ -1,23 +1,28 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <EditTextPreference
-        app:key="key"
-        app:title="Key"
-        app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory app:title="Auth">
+        <EditTextPreference
+            app:key="key"
+            app:title="Key"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
 
-    <ListPreference
-        app:defaultValue="large"
-        app:entries="@array/representationEntries"
-        app:entryValues="@array/representationEntryValues"
-        app:key="searchImageRepresentation"
-        app:title="Search image quality"
-        app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory app:title="Quality">
+        <ListPreference
+            app:defaultValue="large"
+            app:entries="@array/representationEntries"
+            app:entryValues="@array/representationEntryValues"
+            app:key="searchImageRepresentation"
+            app:title="Search image quality"
+            app:useSimpleSummaryProvider="true" />
 
-    <ListPreference
-        app:defaultValue="full"
-        app:entries="@array/representationEntries"
-        app:entryValues="@array/representationEntryValues"
-        app:key="downloadImageRepresentation"
-        app:title="Download image quality"
-        app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            app:defaultValue="full"
+            app:entries="@array/representationEntries"
+            app:entryValues="@array/representationEntryValues"
+            app:key="downloadImageRepresentation"
+            app:title="Download image quality"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
 </PreferenceScreen>
