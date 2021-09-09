@@ -30,6 +30,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import me.lonelyday.derpibooru.DerpibooruApplication
 import me.lonelyday.derpibooru.ui.download.DownloadProgressSearchItem
 import me.lonelyday.derpibooru.ui.download.DownloadProgressView
@@ -76,6 +77,12 @@ class ImageViewHolder(
     private val artistsAdapter = (binding.artists.adapter as? ListAdapter<String, *>?)
 
     val downloadProgressView: DownloadProgressView = DownloadProgressSearchItem(view)
+
+    val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val searchImageRepresentation: String =
+        defaultSharedPreferences.getString("searchImageRepresentation", null)!!
+    private val downloadImageRepresentation: String =
+        defaultSharedPreferences.getString("downloadImageRepresentation", null)!!
 
     // Use only when recycling
     lateinit var image: Image
@@ -131,7 +138,7 @@ class ImageViewHolder(
 
         Glide.with(imageView)
             .load(
-//                image.representations["tall"]
+//                image.representations[searchImageRepresentation]
                 null as String?
             )
             .thumbnail(
@@ -150,7 +157,7 @@ class ImageViewHolder(
     }
 
     private fun bindStartDownload(image: Image) {
-        val url = image.representations["full"]
+        val url = image.representations[downloadImageRepresentation]
         val filename = image.name
         if (url == null) return
 
@@ -160,7 +167,6 @@ class ImageViewHolder(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                // Starting download
                 downloadManager.enqueue(url, filename, image.id)
                 bindCancelDownload(image)
             } else {

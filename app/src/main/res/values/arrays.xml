@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="test">
-        <item>test</item>
-        <item>test2</item>
-        <item>test3</item>
+    <string-array name="representationEntries">
+        <item>thumb_tiny</item>
+        <item>thumb_small</item>
+        <item>thumb</item>
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+        <item>tall</item>
+        <item>full</item>
     </string-array>
 
-    <string-array name="testkeys">
-        <item>man</item>
-        <item>cat</item>
-        <item>god</item>
+    <string-array name="representationEntryValues">
+        <item>thumb_tiny</item>
+        <item>thumb_small</item>
+        <item>thumb</item>
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+        <item>tall</item>
+        <item>full</item>
     </string-array>
 </resources>
