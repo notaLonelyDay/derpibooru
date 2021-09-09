@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.collectLatest
 import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.databinding.FragmentSearchBinding
+import me.lonelyday.derpibooru.ui.download.DownloadManager
+import javax.inject.Inject
 
 
 private const val SEARCH_QUERY = "search_query"
@@ -33,6 +35,9 @@ class SearchFragment : Fragment() {
     private val querySharedViewModel by activityViewModels<SearchQuerySharedViewModel>()
 
     private lateinit var adapter: ImagesAdapter
+
+    @Inject
+    lateinit var downloadManager: DownloadManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +77,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        adapter = ImagesAdapter(requireContext())
+        adapter = ImagesAdapter(downloadManager)
         binding.recyclerList.adapter = adapter.withLoadStateHeaderAndFooter(
             header = SearchLoadStateAdapter(adapter),
             footer = SearchLoadStateAdapter(adapter)

@@ -1,6 +1,7 @@
 package me.lonelyday.derpibooru.di
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.squareup.moshi.Moshi
@@ -17,6 +18,7 @@ import me.lonelyday.derpibooru.APP_PREFERENCES
 import me.lonelyday.derpibooru.BASE_URL
 import me.lonelyday.derpibooru.db.DerpibooruDb
 import me.lonelyday.derpibooru.repository.Repository
+import me.lonelyday.derpibooru.ui.download.DownloadManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -91,6 +93,16 @@ object AppModule {
             DerpibooruDb::class.java,
             "database"
         ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideDownloadManager(
+        @ApplicationContext appContext: Context
+    ): DownloadManager {
+        val downloadManager =
+            appContext.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as android.app.DownloadManager
+        return DownloadManager(downloadManager, appContext)
     }
 
 }

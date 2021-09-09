@@ -149,5 +149,7 @@ dependencies {
     // Testing Fragments in Isolation
 //    debugImplementation("androidx.fragment:fragment-testing:$fragment_version")
 
+    implementation("com.google.guava:guava:30.1.1-android")
+
 
 }

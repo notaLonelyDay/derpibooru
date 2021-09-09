@@ -1,7 +1,6 @@
 package me.lonelyday.derpibooru.ui.search
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -27,22 +26,18 @@ import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.ui.ImageDiffUtilItemCallback
 import android.app.DownloadManager
 import android.content.Context.DOWNLOAD_SERVICE
-import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import com.google.android.material.internal.ContextUtils.getActivity
-import dagger.hilt.android.internal.managers.ViewComponentManager
 import me.lonelyday.derpibooru.DerpibooruApplication
-import me.lonelyday.derpibooru.databinding.FragmentSearchBinding
+import me.lonelyday.derpibooru.ui.download.DownloadProgressSearchItem
+import me.lonelyday.derpibooru.ui.download.DownloadProgressView
 
 
-class ImagesAdapter(private val context: Context) :
+class ImagesAdapter(
+    private val downloadManager: me.lonelyday.derpibooru.ui.download.DownloadManager
+) :
     PagingDataAdapter<Image, ImageViewHolder>(ImageDiffUtilItemCallback()) {
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
@@ -60,12 +55,18 @@ class ImagesAdapter(private val context: Context) :
             it.adapter = artistsAdapter
         }
 
-        return ImageViewHolder(view)
+        return ImageViewHolder(view, downloadManager)
+    }
+
+    override fun onViewRecycled(holder: ImageViewHolder) {
+        super.onViewRecycled(holder)
+        holder.recycle()
     }
 }
 
 class ImageViewHolder(
-    view: View
+    private val view: View,
+    private val downloadManager: me.lonelyday.derpibooru.ui.download.DownloadManager
 ) :
     RecyclerView.ViewHolder(view) {
 
@@ -74,16 +75,21 @@ class ImageViewHolder(
     private val imageView = binding.image
     private val artistsAdapter = (binding.artists.adapter as? ListAdapter<String, *>?)
 
+    val downloadProgressView: DownloadProgressView = DownloadProgressSearchItem(view)
+
+    // Use only when recycling
+    lateinit var image: Image
+
     var tagsRowHeight: Int? = null
 
-
     fun bindTo(image: Image) {
+        this.image = image
         bindImage(image)
         artistsAdapter?.submitList(image.tag_names
             .filter { it.startsWith("artist:") }
             .map { it.removePrefix("artist:") }
         )
-        bindDownload(image.representations["full"], image.name)
+        bindDownload(image)
         binding.faves.text = image.faves.toString()
         binding.upvotes.text = image.upvotes.toString()
         binding.score.text = image.score.toString()
@@ -96,6 +102,11 @@ class ImageViewHolder(
         binding.size.text = image.size.toString()
         binding.description.text = image.description
         bindTags(image.tag_names zip image.tag_ids)
+    }
+
+    fun recycle() {
+        // Removing drawing progress
+        downloadManager.unregisterView(this.image.id)
     }
 
     private fun bindImage(image: Image) {
@@ -132,23 +143,26 @@ class ImageViewHolder(
             .into(imageView)
     }
 
-    private fun bindDownload(url: String?, filename: String) {
+    private fun bindDownload(image: Image) {
+        downloadManager.registerView(downloadProgressView, image.id)
+
+        bindStartDownload(image)
+    }
+
+    private fun bindStartDownload(image: Image) {
+        val url = image.representations["full"]
+        val filename = image.name
         if (url == null) return
+
         binding.downloadButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                binding.downloadButton.setOnClickListener(null)
-                val request = DownloadManager.Request(Uri.parse(url))
-                request
-                    .setTitle(filename)
-                    .setDescription("File is downloading...")
-                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
-                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                val downloadManager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-                val downLoadId = downloadManager.enqueue(request)
+                // Starting download
+                downloadManager.enqueue(url, filename, image.id)
+                bindCancelDownload(image)
             } else {
                 (context.applicationContext as? DerpibooruApplication)?.requestPermissionLauncher?.launch(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -157,6 +171,12 @@ class ImageViewHolder(
         }
     }
 
+    private fun bindCancelDownload(image: Image) {
+        binding.downloadButton.setOnClickListener {
+            downloadManager.cancelDownload(image.id)
+            bindStartDownload(image)
+        }
+    }
 
     private fun bindTags(tags: List<Pair<String, Int>>) {
         // inflating tags
