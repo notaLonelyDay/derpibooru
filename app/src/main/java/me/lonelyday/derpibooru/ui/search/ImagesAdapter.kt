@@ -1,7 +1,11 @@
 package me.lonelyday.derpibooru.ui.search
 
 import android.Manifest
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
@@ -10,9 +14,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,18 +27,12 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable.DEFAULT
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
+import me.lonelyday.derpibooru.DerpibooruApplication
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.databinding.ItemSearchBinding
 import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.ui.ImageDiffUtilItemCallback
-import android.app.DownloadManager
-import android.content.Context.DOWNLOAD_SERVICE
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Environment
-import androidx.core.content.ContextCompat
-import androidx.preference.PreferenceManager
-import me.lonelyday.derpibooru.DerpibooruApplication
+import me.lonelyday.derpibooru.ui.animateViewHeight
 import me.lonelyday.derpibooru.ui.download.DownloadProgressSearchItem
 import me.lonelyday.derpibooru.ui.download.DownloadProgressView
 
@@ -80,13 +81,14 @@ class ImageViewHolder(
 
     val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val searchImageRepresentation: String =
-        defaultSharedPreferences.getString("searchImageRepresentation", null)!!
+        defaultSharedPreferences.getString("searchImageRepresentation", "large")!!
     private val downloadImageRepresentation: String =
-        defaultSharedPreferences.getString("downloadImageRepresentation", null)!!
+        defaultSharedPreferences.getString("downloadImageRepresentation", "large")!!
 
     // Use only when recycling
     lateinit var image: Image
 
+    var tagsExpandedHeight: Int? = null
     var tagsRowHeight: Int? = null
 
     fun bindTo(image: Image) {
@@ -114,6 +116,9 @@ class ImageViewHolder(
     fun recycle() {
         // Removing drawing progress
         downloadManager.unregisterView(this.image.id)
+
+        tagsRowHeight = null
+        tagsExpandedHeight = null
     }
 
     private fun bindImage(image: Image) {
@@ -194,46 +199,54 @@ class ImageViewHolder(
             binding.tags.addView(tagView)
         }
 
-        if (tagsRowHeight != null) {
-            binding.tags.layoutParams.height = tagsRowHeight!!
-        } else
             binding.tags.viewTreeObserver.addOnPreDrawListener(object :
                 ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     binding.tags.viewTreeObserver.removeOnPreDrawListener(this)
+                    tagsExpandedHeight =
+                        binding.tags.height
                     tagsRowHeight =
-                        binding.tags.findViewById<View>(R.id.tagContainer)!!.measuredHeight
-                    collapseTags()
+                        binding.tags.findViewById<View>(R.id.tagContainer)!!.height
+                    collapseTags(false)
+                    binding.tagsExpander.isVisible = tagsRowHeight!! < tagsExpandedHeight!!
                     return false
                 }
             })
     }
 
-    private fun collapseTags() {
-        binding.tags.layoutParams.height = tagsRowHeight!!
-        binding.tags.requestLayout()
+    private fun collapseTags(animated: Boolean = true) {
         binding.tagsExpander.setOnClickListener {
             expandTags()
         }
+
+        // Animation
+        if (animated) {
+            binding.tagsContainer.animateViewHeight(tagsRowHeight!!, 300)
+                .start()
+        } else {
+            binding.tagsContainer.layoutParams.height = tagsRowHeight!!
+        }
+        binding.tags.requestLayout()
+        (AnimatorInflater.loadAnimator(context, R.animator.tags_expander_collapse_animation) as AnimatorSet).apply {
+            setTarget(binding.tagsExpander)
+            start()
+        }
     }
 
+    @SuppressLint("ResourceType")
     private fun expandTags() {
-        binding.tags.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        binding.tags.requestLayout()
-//            it.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-//                override fun onPreDraw(): Boolean {
-//                    it.viewTreeObserver.removeOnPreDrawListener(this)
-//                    ObjectAnimator.ofInt(binding.tags.layoutParams, "height", 50, 100)
-//                        .apply {
-//                            duration = 1000
-//                            start()
-//                        }
-//                    Log.d("tea", "bindTo: ${binding.tags.measuredHeight}")
-//                    return false
-//                }
-//            })
         binding.tagsExpander.setOnClickListener {
             collapseTags()
+        }
+
+        // Animation
+        binding.tagsContainer.animateViewHeight(tagsExpandedHeight!!, 300)
+            .start()
+        binding.tags.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        binding.tags.requestLayout()
+        (AnimatorInflater.loadAnimator(context, R.animator.tags_expander_expand_animation) as AnimatorSet).apply {
+            setTarget(binding.tagsExpander)
+            start()
         }
     }
 }
