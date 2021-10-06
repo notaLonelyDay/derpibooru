@@ -1,14 +1,17 @@
 package me.lonelyday.derpibooru.ui.search
 
+import me.lonelyday.derpibooru.ui.download.DownloadManager
+import me.lonelyday.derpibooru.ui.download.DownloadProgressView
 import android.Manifest
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.LayerDrawable
+import android.graphics.drawable.*
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +20,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.scaleMatrix
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.preference.PreferenceManager
@@ -33,12 +37,14 @@ import me.lonelyday.derpibooru.databinding.ItemSearchBinding
 import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.ui.ImageDiffUtilItemCallback
 import me.lonelyday.derpibooru.ui.animateViewHeight
-import me.lonelyday.derpibooru.ui.download.DownloadProgressSearchItem
-import me.lonelyday.derpibooru.ui.download.DownloadProgressView
+import me.lonelyday.derpibooru.ui.download.DownloadProgressSearchView
+import pl.droidsonroids.gif.GifDrawable
+import pl.droidsonroids.gif.GifDrawableBuilder
+import java.io.ByteArrayOutputStream
 
 
 class ImagesAdapter(
-    private val downloadManager: me.lonelyday.derpibooru.ui.download.DownloadManager
+    private val downloadManager: DownloadManager
 ) :
     PagingDataAdapter<Image, ImageViewHolder>(ImageDiffUtilItemCallback()) {
 
@@ -68,7 +74,7 @@ class ImagesAdapter(
 
 class ImageViewHolder(
     private val view: View,
-    private val downloadManager: me.lonelyday.derpibooru.ui.download.DownloadManager
+    private val downloadManager: DownloadManager
 ) :
     RecyclerView.ViewHolder(view) {
 
@@ -77,13 +83,17 @@ class ImageViewHolder(
     private val imageView = binding.image
     private val artistsAdapter = (binding.artists.adapter as? ListAdapter<String, *>?)
 
-    val downloadProgressView: DownloadProgressView = DownloadProgressSearchItem(view)
-
-    val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val searchImageRepresentation: String =
         defaultSharedPreferences.getString("searchImageRepresentation", "large")!!
     private val downloadImageRepresentation: String =
         defaultSharedPreferences.getString("downloadImageRepresentation", "large")!!
+
+    private val downloadProgressView: DownloadProgressView =
+        DownloadProgressSearchView(binding.downloadButton.root)
+
+    private val requestPermissionLauncher =
+        (context.applicationContext as? DerpibooruApplication)?.requestPermissionLauncher
 
     // Use only when recycling
     lateinit var image: Image
@@ -115,7 +125,7 @@ class ImageViewHolder(
 
     fun recycle() {
         // Removing drawing progress
-        downloadManager.unregisterView(this.image.id)
+        downloadManager.unregisterView(downloadProgressView)
 
         tagsRowHeight = null
         tagsExpandedHeight = null
@@ -127,28 +137,26 @@ class ImageViewHolder(
         val bitmap = colorDrawable.toBitmap((100 * aspectRatio).toInt(), 100)
         val placeholderBg = bitmap.toDrawable(imageView.resources)
 
-        val progressDrawable = CircularProgressDrawable(context).apply {
-            setStyle(DEFAULT)
-            setColorSchemeColors(Color.CYAN)
-            centerRadius = 0.9f
-            strokeWidth = 0.3f
-            start()
-        }
+        val gifDrawable = GifDrawable(context.resources, R.drawable.luna_placeholder)
+
         val placeholder = LayerDrawable(
             arrayOf(
                 placeholderBg,
-                progressDrawable
+//                progressDrawable
+                gifDrawable
             )
-        )
+        ).apply {
+            setLayerInset(1, 300, 300, 300, 300)
+        }
 
         Glide.with(imageView)
             .load(
-//                image.representations[searchImageRepresentation]
-                null as String?
+                image.representations[searchImageRepresentation]
+//                null as String?
             )
             .thumbnail(
-//                Glide.with(imageView)
-//                    .load(image.representations["thumb_tiny"])
+                Glide.with(imageView)
+                    .load(image.representations["thumb_tiny"])
             )
             .placeholder(placeholder)
             .priority(Priority.IMMEDIATE)
@@ -156,26 +164,27 @@ class ImageViewHolder(
     }
 
     private fun bindDownload(image: Image) {
-        downloadManager.registerView(downloadProgressView, image.id)
+        downloadManager.registerView(image.id, downloadProgressView)
 
         bindStartDownload(image)
     }
 
     private fun bindStartDownload(image: Image) {
         val url = image.representations[downloadImageRepresentation]
-        val filename = image.name
+        val filename =
+            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath + image.name
         if (url == null) return
 
-        binding.downloadButton.setOnClickListener {
+        binding.downloadButton.root.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                downloadManager.enqueue(url, filename, image.id)
+                downloadManager.enqueue(image.id, url, filename)
                 bindCancelDownload(image)
             } else {
-                (context.applicationContext as? DerpibooruApplication)?.requestPermissionLauncher?.launch(
+                requestPermissionLauncher?.launch(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
             }
@@ -183,7 +192,7 @@ class ImageViewHolder(
     }
 
     private fun bindCancelDownload(image: Image) {
-        binding.downloadButton.setOnClickListener {
+        binding.downloadButton.root.setOnClickListener {
             downloadManager.cancelDownload(image.id)
             bindStartDownload(image)
         }
@@ -199,19 +208,19 @@ class ImageViewHolder(
             binding.tags.addView(tagView)
         }
 
-            binding.tags.viewTreeObserver.addOnPreDrawListener(object :
-                ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    binding.tags.viewTreeObserver.removeOnPreDrawListener(this)
-                    tagsExpandedHeight =
-                        binding.tags.height
-                    tagsRowHeight =
-                        binding.tags.findViewById<View>(R.id.tagContainer)!!.height
-                    collapseTags(false)
-                    binding.tagsExpander.isVisible = tagsRowHeight!! < tagsExpandedHeight!!
-                    return false
-                }
-            })
+        binding.tags.viewTreeObserver.addOnPreDrawListener(object :
+            ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                binding.tags.viewTreeObserver.removeOnPreDrawListener(this)
+                tagsExpandedHeight =
+                    binding.tags.height
+                tagsRowHeight =
+                    binding.tags.findViewById<View>(R.id.tagContainer)!!.height
+                collapseTags(false)
+                binding.tagsExpander.isVisible = tagsRowHeight!! < tagsExpandedHeight!!
+                return false
+            }
+        })
     }
 
     private fun collapseTags(animated: Boolean = true) {
@@ -227,7 +236,10 @@ class ImageViewHolder(
             binding.tagsContainer.layoutParams.height = tagsRowHeight!!
         }
         binding.tags.requestLayout()
-        (AnimatorInflater.loadAnimator(context, R.animator.tags_expander_collapse_animation) as AnimatorSet).apply {
+        (AnimatorInflater.loadAnimator(
+            context,
+            R.animator.tags_expander_collapse_animation
+        ) as AnimatorSet).apply {
             setTarget(binding.tagsExpander)
             start()
         }
@@ -244,7 +256,10 @@ class ImageViewHolder(
             .start()
         binding.tags.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
         binding.tags.requestLayout()
-        (AnimatorInflater.loadAnimator(context, R.animator.tags_expander_expand_animation) as AnimatorSet).apply {
+        (AnimatorInflater.loadAnimator(
+            context,
+            R.animator.tags_expander_expand_animation
+        ) as AnimatorSet).apply {
             setTarget(binding.tagsExpander)
             start()
         }

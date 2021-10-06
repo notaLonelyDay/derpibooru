@@ -1,7 +1,7 @@
 package me.lonelyday.derpibooru.di
 
+import me.lonelyday.derpibooru.ui.download.DownloadManager
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.squareup.moshi.Moshi
@@ -14,17 +14,19 @@ import dagger.hilt.components.SingletonComponent
 import me.lonelyday.api.controller.DerpibooruServiceImpl
 import me.lonelyday.api.interfaces.DerpibooruApi
 import me.lonelyday.api.interfaces.DerpibooruService
-import me.lonelyday.derpibooru.APP_PREFERENCES
 import me.lonelyday.derpibooru.BASE_URL
 import me.lonelyday.derpibooru.db.DerpibooruDb
 import me.lonelyday.derpibooru.repository.Repository
-import me.lonelyday.derpibooru.ui.download.DownloadManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 import javax.inject.Singleton
+import com.tonyodev.fetch2.FetchConfiguration
+
+
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -100,9 +102,11 @@ object AppModule {
     fun provideDownloadManager(
         @ApplicationContext appContext: Context
     ): DownloadManager {
-        val downloadManager =
-            appContext.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as android.app.DownloadManager
-        return DownloadManager(downloadManager, appContext)
+        val fetchConfiguration: FetchConfiguration = FetchConfiguration.Builder(appContext)
+            .setDownloadConcurrentLimit(3)
+            .build()
+
+        return DownloadManager(appContext, fetchConfiguration)
     }
 
 }
