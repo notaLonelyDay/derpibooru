@@ -22,6 +22,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.scaleMatrix
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DiffUtil
@@ -32,6 +33,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable.DEFAULT
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import me.lonelyday.derpibooru.DerpibooruApplication
+import me.lonelyday.derpibooru.MainNavigationDirections
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.databinding.ItemSearchBinding
 import me.lonelyday.derpibooru.db.vo.Image
@@ -44,7 +46,8 @@ import java.io.ByteArrayOutputStream
 
 
 class ImagesAdapter(
-    private val downloadManager: DownloadManager
+    private val downloadManager: DownloadManager,
+    private val fragment: SearchFragment
 ) :
     PagingDataAdapter<Image, ImageViewHolder>(ImageDiffUtilItemCallback()) {
 
@@ -63,7 +66,7 @@ class ImagesAdapter(
             it.adapter = artistsAdapter
         }
 
-        return ImageViewHolder(view, downloadManager)
+        return ImageViewHolder(view, downloadManager, fragment)
     }
 
     override fun onViewRecycled(holder: ImageViewHolder) {
@@ -74,7 +77,8 @@ class ImagesAdapter(
 
 class ImageViewHolder(
     private val view: View,
-    private val downloadManager: DownloadManager
+    private val downloadManager: DownloadManager,
+    private val fragment: SearchFragment
 ) :
     RecyclerView.ViewHolder(view) {
 
@@ -161,6 +165,13 @@ class ImageViewHolder(
             .placeholder(placeholder)
             .priority(Priority.IMMEDIATE)
             .into(imageView)
+
+        imageView.setOnClickListener {
+            fragment.findNavController().navigate(
+                // TODO: check name
+                MainNavigationDirections.actionGlobalToFullScreenImageFragment(image)
+            )
+        }
     }
 
     private fun bindDownload(image: Image) {

@@ -5,18 +5,29 @@
     android:id="@+id/main_navigation"
     app:startDestination="@id/searchFragment">
 
+
+    <action
+        android:id="@+id/action_global_to_fullScreenImageFragment"
+        app:destination="@id/fullScreenImageFragment">
+    </action>
+
     <fragment
         android:id="@+id/searchFragment"
         android:name="me.lonelyday.derpibooru.ui.search.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/fragment_search">
-        <action
-            android:id="@+id/action_searchFragment_to_preferencesFragment"
-            app:destination="@id/preferencesFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/preferencesFragment"
         android:name="me.lonelyday.derpibooru.ui.preferences.PreferencesFragment"
         android:label="PreferencesFragment" />
+    <fragment
+        android:id="@+id/fullScreenImageFragment"
+        android:name="me.lonelyday.derpibooru.ui.search.FullScreenImageFragment"
+        android:label="FullScreenImageFragment" >
+        <argument
+            android:name="image"
+            app:argType="me.lonelyday.derpibooru.db.vo.Image"
+            app:nullable="false" />
+    </fragment>
 
 </navigation>

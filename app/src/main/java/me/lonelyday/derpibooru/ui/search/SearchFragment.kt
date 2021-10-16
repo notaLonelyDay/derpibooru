@@ -42,8 +42,10 @@ class SearchFragment : Fragment() {
         arguments?.let {
             searchQuery = it.getStringArrayList(SEARCH_QUERY)!!
         }
+        if(searchQuery.isNullOrEmpty()){
+            searchQuery = arrayListOf("safe")
+        }
         setHasOptionsMenu(true)
-
     }
 
     override fun onCreateView(
@@ -74,7 +76,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        adapter = ImagesAdapter(downloadManager)
+        adapter = ImagesAdapter(downloadManager, this)
         binding.recyclerList.adapter = adapter.withLoadStateHeaderAndFooter(
             header = SearchLoadStateAdapter(adapter),
             footer = SearchLoadStateAdapter(adapter)

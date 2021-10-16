@@ -37,6 +37,8 @@ class SearchQueryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.queryText.setText("safe")
+
         binding.queryText.addTextChangedListener{
             querySharedViewModel.query.value = Query(it.toString())
         }

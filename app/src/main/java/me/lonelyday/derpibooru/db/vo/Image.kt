@@ -1,9 +1,14 @@
 package me.lonelyday.derpibooru.db.vo
 
-import androidx.room.*
+import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 import me.lonelyday.api.models.ImageModel
-import java.util.*
 
+@Parcelize
 @Entity
 data class Image(
     @PrimaryKey
@@ -46,7 +51,7 @@ data class Image(
     @ColumnInfo(name = "view_url") val view_url: String,
     @ColumnInfo(name = "width") val width: Int,
     @ColumnInfo(name = "wilson_score") val wilson_score: Float,
-){
+) : Parcelable {
     @Ignore
     var tags: List<Tag> = emptyList()
 }
