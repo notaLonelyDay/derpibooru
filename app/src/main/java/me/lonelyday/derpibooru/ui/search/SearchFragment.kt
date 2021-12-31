@@ -23,8 +23,6 @@ private const val SEARCH_QUERY = "search_query"
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
-    private var searchQuery: List<String> = arrayListOf("safe")
-
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
@@ -39,12 +37,6 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            searchQuery = it.getStringArrayList(SEARCH_QUERY)!!
-        }
-        if(searchQuery.isNullOrEmpty()){
-            searchQuery = arrayListOf("safe")
-        }
         setHasOptionsMenu(true)
     }
 

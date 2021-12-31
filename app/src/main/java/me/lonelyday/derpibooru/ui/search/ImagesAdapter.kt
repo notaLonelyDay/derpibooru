@@ -21,7 +21,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.scaleMatrix
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.preference.PreferenceManager
@@ -30,6 +32,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable.DEFAULT
+import com.ablanco.zoomy.ZoomListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import me.lonelyday.derpibooru.DerpibooruApplication
@@ -43,6 +46,7 @@ import me.lonelyday.derpibooru.ui.download.DownloadProgressSearchView
 import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifDrawableBuilder
 import java.io.ByteArrayOutputStream
+import com.ablanco.zoomy.Zoomy
 
 
 class ImagesAdapter(
@@ -166,12 +170,22 @@ class ImageViewHolder(
             .priority(Priority.IMMEDIATE)
             .into(imageView)
 
-        imageView.setOnClickListener {
-            fragment.findNavController().navigate(
-                // TODO: check name
-                MainNavigationDirections.actionGlobalToFullScreenImageFragment(image)
-            )
-        }
+        Zoomy.Builder(fragment.activity)
+            .target(imageView)
+            .enableImmersiveMode(false)
+            .register()
+
+
+//        imageView.setOnClickListener {
+//            ViewCompat.setTransitionName(it, "item_image")
+//            val extras = FragmentNavigatorExtras(it to "hero_image")
+//            fragment.findNavController().navigate(
+//                 TODO: check name
+//                MainNavigationDirections.actionGlobalToFullScreenImageFragment(image),
+//                extras
+//            )
+
+//        }
     }
 
     private fun bindDownload(image: Image) {

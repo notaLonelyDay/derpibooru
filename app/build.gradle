@@ -62,6 +62,7 @@ dependencies {
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
     implementation "androidx.tonyodev.fetch2:xfetch2:3.1.6"
+    implementation 'io.github.imablanco:zoomy:1.0.0'
 
 
     implementation("androidx.room:room-runtime:$room_version")

@@ -19,6 +19,10 @@ import me.lonelyday.derpibooru.databinding.FragmentSearchQueryBinding
 
 class SearchQueryFragment : Fragment() {
 
+    companion object{
+        val DEFAULT_QUERY = Query("safe")
+    }
+
     private var _binding: FragmentSearchQueryBinding? = null
     private val binding get() = _binding!!
 
@@ -38,6 +42,7 @@ class SearchQueryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.queryText.setText("safe")
+        querySharedViewModel.query.value = DEFAULT_QUERY
 
         binding.queryText.addTextChangedListener{
             querySharedViewModel.query.value = Query(it.toString())

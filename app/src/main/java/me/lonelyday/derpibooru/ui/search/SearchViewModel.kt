@@ -26,7 +26,7 @@ class SearchViewModel @Inject constructor(
     init {
         repo.refresh()
         if (!savedStateHandle.contains(KEY_QUERY)) {
-            savedStateHandle.set(KEY_QUERY, Query("safe"))
+            savedStateHandle.set<Query>(KEY_QUERY, SearchQueryFragment.DEFAULT_QUERY)
         }
     }
 
@@ -40,8 +40,8 @@ class SearchViewModel @Inject constructor(
     ).flattenMerge(2)
 
     fun submitQuery(query: Query) {
-        clearListCh.trySend(Unit).isSuccess
         if (savedStateHandle.get<Query>(KEY_QUERY) != query) {
+            clearListCh.trySend(Unit).isSuccess
             savedStateHandle.set<Query>(KEY_QUERY, query)
         }
     }
