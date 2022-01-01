@@ -16,17 +16,18 @@ import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.databinding.FragmentSearchBinding
 import me.lonelyday.derpibooru.databinding.FragmentSearchQueryBinding
+import me.lonelyday.derpibooru.ui.createDefaultQuery
 
 class SearchQueryFragment : Fragment() {
 
     companion object{
-        val DEFAULT_QUERY = Query("safe")
+        val DEFAULT_QUERY = createDefaultQuery()
     }
 
     private var _binding: FragmentSearchQueryBinding? = null
     private val binding get() = _binding!!
 
-    val querySharedViewModel by activityViewModels<SearchQuerySharedViewModel>()
+    private val querySharedViewModel by activityViewModels<SearchQuerySharedViewModel>()
     val viewModel by viewModels<SearchQueryViewModel>()
 
     override fun onCreateView(

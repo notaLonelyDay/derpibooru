@@ -24,9 +24,9 @@ class DerpibooruServiceImpl(
             filterId = filterId,
             page = page,
             perPage = perPage,
-            query = query.string,
-            sortDirection = query.sortDirection?.name,
-            sortField = query.sortField?.name,
+            query = query.toString(),
+            sortDirection = query.sortDirection?.value,
+            sortField = query.sortField?.value,
         )
     }
 

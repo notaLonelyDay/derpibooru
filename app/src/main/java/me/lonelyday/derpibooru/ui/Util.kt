@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.db.vo.Image
 import java.time.Duration
 
@@ -26,4 +27,8 @@ fun View.animateViewHeight(toInt: Int, duration: Long): ValueAnimator {
     }
     anim.duration = duration
     return anim
+}
+
+fun createDefaultQuery(): Query {
+    return Query("safe")
 }

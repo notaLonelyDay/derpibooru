@@ -1,7 +1,7 @@
 package me.lonelyday.api.models
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
@@ -9,10 +9,14 @@ data class Query(
     val string: String,
     val sortField: SortField? = null,
     val sortDirection: SortDirection? = null,
-): Parcelable
+): Parcelable {
+    override fun toString(): String {
+        return string
+    }
+}
 
 enum class SortField(
-    value: String,
+    val value: String,
     description: String
 ) {
     Id("id", "image ID"),
