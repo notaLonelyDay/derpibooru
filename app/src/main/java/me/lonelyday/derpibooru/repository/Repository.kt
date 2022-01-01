@@ -51,7 +51,11 @@ open class Repository(
 
     fun searchImagesPaging(query: Query): Flow<PagingData<Image>> =
         Pager(
-            PagingConfig(pageSize = perPage)
+            PagingConfig(
+                pageSize = perPage,
+                initialLoadSize = perPage,
+                enablePlaceholders = false
+            )
         ) {
             NetworkSearchImagesPagingSource(
                 this, query
