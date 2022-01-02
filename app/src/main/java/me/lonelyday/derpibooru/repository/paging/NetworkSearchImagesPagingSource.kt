@@ -3,6 +3,7 @@ package me.lonelyday.derpibooru.repository.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import me.lonelyday.api.models.Query
+import me.lonelyday.derpibooru.FIRST_PAGE_NUMBER
 import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.repository.Repository
 import retrofit2.HttpException
@@ -14,13 +15,12 @@ class NetworkSearchImagesPagingSource(
 ) : PagingSource<Int, Image>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Image> {
         try {
-            val key = params.key ?: 0
+            val key = params.key ?: FIRST_PAGE_NUMBER
             val next = key + 1
-            val prev = if (key != 0) key - 1 else null
+            val prev = if (key != FIRST_PAGE_NUMBER) key - 1 else null
 
 
             val data = repo.searchImages(query, key, params.loadSize)
-
             return LoadResult.Page(
                 data = data,
                 prevKey = prev,

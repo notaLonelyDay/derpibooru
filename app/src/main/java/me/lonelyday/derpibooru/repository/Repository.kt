@@ -54,7 +54,7 @@ open class Repository(
             PagingConfig(
                 pageSize = perPage,
                 initialLoadSize = perPage,
-                enablePlaceholders = false
+                enablePlaceholders = false,
             )
         ) {
             NetworkSearchImagesPagingSource(

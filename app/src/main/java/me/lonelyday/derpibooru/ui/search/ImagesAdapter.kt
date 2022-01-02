@@ -11,12 +11,15 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.*
+import android.os.Build
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
@@ -54,9 +57,19 @@ class ImagesAdapter(
     private val fragment: SearchFragment
 ) :
     PagingDataAdapter<Image, ImageViewHolder>(ImageDiffUtilItemCallback()) {
+    val a = mutableMapOf<Int,Int>()
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val item = getItem(position) ?: return
+//        val id = item.id
+//        if(a.contains(id)) {
+//            Log.d("\n\n\n\n", "onBindViewHolder: $item")
+//            Log.d("\n\n", "pizdanulo znatno:${a[id]}")
+//        }
+//        a.compute(id) { i: Int, i1: Int? ->
+//            i1?.plus(1) ?: 1
+//        }
         holder.bindTo(item)
     }
 
@@ -85,6 +98,7 @@ class ImageViewHolder(
     private val fragment: SearchFragment
 ) :
     RecyclerView.ViewHolder(view) {
+    private val TAG = "ImageViewHolder"
 
     val context: Context = view.context
     private val binding = ItemSearchBinding.bind(view)
@@ -140,6 +154,7 @@ class ImageViewHolder(
     }
 
     private fun bindImage(image: Image) {
+        Log.d(TAG, "bindImage: started")
         val colorDrawable = ColorDrawable(Color.BLACK)
         val aspectRatio = image.width.toFloat() / image.height
         val bitmap = colorDrawable.toBitmap((100 * aspectRatio).toInt(), 100)
@@ -165,9 +180,11 @@ class ImageViewHolder(
             .thumbnail(
                 Glide.with(imageView)
                     .load(image.representations["thumb_tiny"])
+                    .error(R.drawable.ic_logo)
             )
             .placeholder(placeholder)
             .priority(Priority.IMMEDIATE)
+            .error(R.drawable.ic_logo)
             .into(imageView)
 
         Zoomy.Builder(fragment.activity)
@@ -186,6 +203,7 @@ class ImageViewHolder(
 //            )
 
 //        }
+        Log.d(TAG, "bindImage: finished")
     }
 
     private fun bindDownload(image: Image) {

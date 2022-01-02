@@ -15,7 +15,10 @@ import android.graphics.drawable.Drawable
 
 const val BASE_URL = "https://derpibooru.org/api/v1/json/"
 
-const val DEFAULT_PAGE_SIZE = 5
+// Do not change
+const val FIRST_PAGE_NUMBER = 1
+
+const val DEFAULT_PAGE_SIZE = 3
 
 const val APP_PREFERENCES = "me.lonelyday.derpibooru.preferences"
 

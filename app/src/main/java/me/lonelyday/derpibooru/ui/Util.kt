@@ -10,7 +10,8 @@ import java.time.Duration
 
 class ImageDiffUtilItemCallback : DiffUtil.ItemCallback<Image>() {
     override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
-        return oldItem.id == newItem.id
+//        return oldItem.id == newItem.id
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: Image, newItem: Image): Boolean {
