@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.search.SearchFragment">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/searchQueryFragment"
-        android:name="me.lonelyday.derpibooru.ui.search.SearchQueryFragment"
-        android:layout_width="match_parent"
-        android:layout_gravity="top"
-        android:background="@color/black"
-        android:translationZ="2dp"
-        android:layout_height="wrap_content"
-        tools:layout="@layout/fragment_search_query" />
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:id="@+id/searchBottomSheet"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">-->
+
+<!--        <androidx.fragment.app.FragmentContainerView-->
+<!--            android:id="@+id/searchQueryFragment"-->
+<!--            android:name="me.lonelyday.derpibooru.ui.search.SearchQueryFragment"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_gravity="top"-->
+<!--            android:background="@color/black"-->
+<!--            android:translationZ="2dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            tools:layout="@layout/fragment_search_query" />-->
+<!--    </FrameLayout>-->
 
     <FrameLayout
         android:visibility="visible"
@@ -37,4 +44,4 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </FrameLayout>
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

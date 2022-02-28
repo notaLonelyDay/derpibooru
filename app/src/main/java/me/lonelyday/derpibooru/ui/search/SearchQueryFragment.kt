@@ -12,13 +12,14 @@ import android.widget.SearchView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.databinding.FragmentSearchBinding
 import me.lonelyday.derpibooru.databinding.FragmentSearchQueryBinding
 import me.lonelyday.derpibooru.ui.createDefaultQuery
 
-class SearchQueryFragment : Fragment() {
+class SearchQueryFragment : BottomSheetDialogFragment() {
 
     companion object{
         val DEFAULT_QUERY = createDefaultQuery()

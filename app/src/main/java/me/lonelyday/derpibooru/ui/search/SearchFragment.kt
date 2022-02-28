@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import me.lonelyday.api.models.Query
@@ -34,6 +36,8 @@ class SearchFragment : Fragment() {
     @Inject
     lateinit var downloadManager: DownloadManager
 
+    lateinit var searchBottomSheet: BottomSheetDialogFragment
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +58,11 @@ class SearchFragment : Fragment() {
 
         initAdapter()
         initQueryListener()
+        initSearchBottomSheet()
+    }
+
+    private fun initSearchBottomSheet() {
+        searchBottomSheet = SearchQueryFragment()
     }
 
     private fun initQueryListener() {
@@ -62,9 +71,19 @@ class SearchFragment : Fragment() {
         }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.menu_item_search -> {
+                searchBottomSheet.show(childFragmentManager, "")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initAdapter() {
@@ -88,12 +107,12 @@ class SearchFragment : Fragment() {
         }
 
 
-        binding.recyclerList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
+//        binding.recyclerList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
 //                if (binding.searchQueryFragment.animation?.hasEnded() == false)
 //                    return
-                binding.searchQueryFragment.isVisible = dy < 0
+//                binding.searchQueryFragment.isVisible = dy < 0
 //                val translationY =
 //                    if (dy > 0){
 //                        binding.searchQueryFragment.height.toFloat() * -1
@@ -104,8 +123,8 @@ class SearchFragment : Fragment() {
 //                    .setDuration(40)
 //                    .start()
 
-            }
-        })
+//            }
+//        })
     }
 
     private fun submitQuery(query: Query) {
