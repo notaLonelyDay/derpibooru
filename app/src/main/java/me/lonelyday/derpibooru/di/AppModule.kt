@@ -16,6 +16,7 @@ import me.lonelyday.api.interfaces.DerpibooruService
 import me.lonelyday.derpibooru.BASE_URL
 import me.lonelyday.derpibooru.db.DerpibooruDb
 import me.lonelyday.derpibooru.repository.Repository
+import me.lonelyday.derpibooru.repository.SettingsRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -53,6 +54,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideDerpibooruService(
+        settingsRepository: SettingsRepository,
         httpClient: OkHttpClient,
         moshi: Moshi
     ): DerpibooruService {
@@ -64,8 +66,7 @@ object AppModule {
             .client(httpClient)
             .build()
             .create(DerpibooruApi::class.java)
-
-        return DerpibooruServiceImpl(derpibooruApi)
+        return DerpibooruServiceImpl(derpibooruApi, { settingsRepository.filterId }, { settingsRepository.key })
     }
 
     @Singleton
@@ -73,14 +74,21 @@ object AppModule {
     fun provideRepository(
         database: DerpibooruDb,
         service: DerpibooruService,
-        @ApplicationContext appContext: Context
+        settingsRepository: SettingsRepository,
     ): Repository {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(appContext)
         return Repository(
             database,
             service,
-            sharedPreferences
+            settingsRepository,
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideSettingsRepository(
+        @ApplicationContext appContext: Context
+    ): SettingsRepository {
+        return SettingsRepository(PreferenceManager.getDefaultSharedPreferences(appContext))
     }
 
     @Singleton
