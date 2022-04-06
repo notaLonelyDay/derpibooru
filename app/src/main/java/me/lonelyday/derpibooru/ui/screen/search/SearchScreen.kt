@@ -11,7 +11,7 @@ fun SearchScreen(
     navController: NavController
 ) {
     Text(text = "SearchScreen")
-    Column() {
+    Column {
         repeat(10) {
             ImageItemPreview()
         }

@@ -7,6 +7,8 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import me.lonelyday.api.models.ImageModel
+import java.time.LocalDateTime
+import java.util.*
 
 @Parcelize
 @Entity
@@ -17,14 +19,14 @@ data class Image(
     @ColumnInfo(name = "animated") val animated: Boolean,
     @ColumnInfo(name = "aspect_ratio") val aspectRatio: Float,
     @ColumnInfo(name = "comment_count") val commentCount: Int,
-    @ColumnInfo(name = "created_at") val createdAt: Long?,
+    @ColumnInfo(name = "created_at") val createdAt: LocalDateTime,
     @ColumnInfo(name = "deletion_reason") val deletion_reason: String?,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "downvotes") val downvotes: Int,
     @ColumnInfo(name = "duplicate_of") val duplicate_of: Int?,
     @ColumnInfo(name = "duration") val duration: Float,
     @ColumnInfo(name = "faves") val faves: Int,
-    @ColumnInfo(name = "first_seen_at") val first_seen_at: Long,
+    @ColumnInfo(name = "first_seen_at") val first_seen_at: LocalDateTime,
     @ColumnInfo(name = "format") val format: String,
     @ColumnInfo(name = "height") val height: Int,
     @ColumnInfo(name = "hidden_from_users") val hidden_from_users: Boolean,
@@ -62,14 +64,14 @@ fun ImageModel.toImage(): Image {
         animated = this.animated,
         aspectRatio = this.aspectRatio,
         commentCount = this.commentCount,
-        createdAt = this.createdAt?.time,
+        createdAt = LocalDateTime.ofEpochSecond(this.createdAt, 0, null),
         deletion_reason = this.deletionReason,
         description = this.description,
         downvotes = this.downvotes,
         duplicate_of = this.duplicate_of,
         duration = this.duration,
         faves = this.faves,
-        first_seen_at = this.first_seen_at?.time,
+        first_seen_at = LocalDateTime.ofEpochSecond(this.first_seen_at, 0, null),
         format = this.format,
         height = this.height,
         hidden_from_users = this.hidden_from_users,

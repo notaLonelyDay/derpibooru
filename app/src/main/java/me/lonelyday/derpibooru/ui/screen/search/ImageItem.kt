@@ -1,24 +1,50 @@
 package me.lonelyday.derpibooru.ui.screen.search
 
-import androidx.compose.animation.core.animate
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.db.vo.Image
 
 @Composable
 fun ImageItem(image: Image) {
-    Row {
-        ArtistsList()
+    Column {
+        ArtistsList(image = image)
+        ImageRaw(image = image)
+        ImageRating(image = image)
     }
 }
 
 @Composable
-fun ArtistsList() {
-    Column {
-        Text(text = "Artists")
+fun ArtistsList(image: Image) {
+    Row {
+        for (artist in image.tag_names) {
+            Text(modifier = Modifier.padding(3.dp), text = artist)
+        }
+    }
+}
+
+@Composable
+fun ImageRaw(image: Image) {
+    val imagePainter: Painter = painterResource(id = R.drawable.ic_menu_gallery)
+    Image(painter = imagePainter, contentDescription = "")
+
+}
+
+@Composable
+fun ImageRating(image: Image) {
+    Row {
+        Text(text = "300")
+        Text(text = "300")
+        Text(text = "300")
     }
 }
 

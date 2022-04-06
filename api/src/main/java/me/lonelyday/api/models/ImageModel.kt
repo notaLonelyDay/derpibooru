@@ -1,20 +1,21 @@
 package me.lonelyday.api.models
 
 import com.squareup.moshi.Json
+import java.time.LocalDateTime
 import java.util.*
 
 data class ImageModel(
     @Json(name = "animated") val animated: Boolean,
     @Json(name = "aspect_ratio") val aspectRatio: Float,
     @Json(name = "comment_count") val commentCount: Int,
-    @Json(name = "created_at") val createdAt: Date,
+    @Json(name = "created_at") val createdAt: Long,
     @Json(name = "deletion_reason") val deletionReason: String?,
     @Json(name = "description") val description: String,
     @Json(name = "downvotes") val downvotes: Int,
     @Json(name = "duplicate_of") val duplicate_of: Int?,
     @Json(name = "duration") val duration: Float,
     @Json(name = "faves") val faves: Int,
-    @Json(name = "first_seen_at") val first_seen_at: Date,
+    @Json(name = "first_seen_at") val first_seen_at: Long,
     @Json(name = "format") val format: String,
     @Json(name = "height") val height: Int,
     @Json(name = "hidden_from_users") val hidden_from_users: Boolean,
