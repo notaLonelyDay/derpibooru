@@ -22,7 +22,6 @@ open class Repository(
     private val settingsRepository: SettingsRepository
 ) {
 
-
     suspend fun featuredImage() = service.featuredImage().image.toImage()
 
     fun searchImagesPaging(query: Query): Flow<PagingData<Image>> = Pager(
