@@ -1,68 +1,47 @@
 package me.lonelyday.derpibooru.repository
 
-import android.content.SharedPreferences
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 import me.lonelyday.api.interfaces.DerpibooruService
+import me.lonelyday.api.models.ImageModel
 import me.lonelyday.api.models.Query
 import me.lonelyday.api.models.SearchTagsResponse
-import me.lonelyday.derpibooru.DEFAULT_PAGE_SIZE
 import me.lonelyday.derpibooru.db.DerpibooruDb
 import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.db.vo.Tag
 import me.lonelyday.derpibooru.db.vo.toImage
 import me.lonelyday.derpibooru.db.vo.toTag
 import me.lonelyday.derpibooru.repository.paging.NetworkSearchImagesPagingSource
+import java.time.LocalDateTime
 
 open class Repository(
     private val database: DerpibooruDb,
     private val service: DerpibooruService,
-    private val sharedPreferences: SharedPreferences
+    private val settingsRepository: SettingsRepository
 ) {
-
-    // settings
-    var perPage: Int = DEFAULT_PAGE_SIZE
-    var key: String? = null
-    var filterId: Int? = null
-
-    init {
-        refresh()
-    }
-
-    fun refresh() {
-        perPage = sharedPreferences.getInt("page_size", DEFAULT_PAGE_SIZE)
-        key = sharedPreferences.getString("key", null)
-        filterId = sharedPreferences.getString("filter_id", null)?.toInt()
-        // TODO: better way retrieving filterId
-        updateService()
-    }
-
-    private fun updateService() {
-        service.key = key
-        service.filterId = filterId
-    }
 
 
     suspend fun featuredImage() = service.featuredImage().image.toImage()
 
-    fun searchImagesPaging(query: Query): Flow<PagingData<Image>> =
-        Pager(
-            PagingConfig(
-                pageSize = perPage,
-                initialLoadSize = perPage,
-                enablePlaceholders = false,
-            )
-        ) {
-            NetworkSearchImagesPagingSource(
-                this, query
-            )
-        }.flow
+    fun searchImagesPaging(query: Query): Flow<PagingData<Image>> = Pager(
+        PagingConfig(
+            pageSize = settingsRepository.pageSize,
+            initialLoadSize = settingsRepository.pageSize,
+            enablePlaceholders = false,
+        )
+    ) {
+        NetworkSearchImagesPagingSource(
+            this, query
+        )
+    }.flow
 
-    suspend fun searchImages(query: Query, page: Int, perPage: Int = this.perPage): List<Image> {
+    suspend fun searchImages(
+        query: Query,
+        page: Int,
+        perPage: Int = settingsRepository.pageSize
+    ): List<Image> {
         val response = service.searchImages(query, page, perPage)
         return response.images.map {
             val image = it.toImage()
@@ -89,7 +68,7 @@ open class Repository(
         return service.searchTags(
             query = query,
             page = page,
-            perPage = perPage
+            perPage = settingsRepository.pageSize
         )
     }
 
@@ -97,10 +76,54 @@ open class Repository(
         var tag = database.tagDao().load(id)
         if (tag == null) {
             tag = searchTags(query = name).tags.getOrNull(0)?.toTag()
-            tag?.let{
+            tag?.let {
                 database.tagDao().insert(it)
             }
         }
         return tag
+    }
+
+    // TODO use it
+    inner class Mapper {
+        fun map(image: ImageModel): Image {
+            return Image(
+                id = image.id,
+                animated = image.animated,
+                aspectRatio = image.aspectRatio,
+                commentCount = image.commentCount,
+                createdAt = LocalDateTime.ofEpochSecond(image.createdAt, 0, null),
+                deletion_reason = image.deletionReason,
+                description = image.description,
+                downvotes = image.downvotes,
+                duplicate_of = image.duplicate_of,
+                duration = image.duration,
+                faves = image.faves,
+                first_seen_at = LocalDateTime.ofEpochSecond(image.first_seen_at, 0, null),
+                format = image.format,
+                height = image.height,
+                hidden_from_users = image.hidden_from_users,
+                mime_type = image.mime_type,
+                name = image.name,
+                orig_sha512_hash = image.orig_sha512_hash,
+                processed = image.processed,
+                representations = image.representations,
+                score = image.score,
+                sha512_hash = image.sha512_hash,
+                size = image.size,
+                source_url = image.source_url,
+                spoilered = image.spoilered,
+                tag_count = image.tag_count,
+                tag_ids = image.tag_ids,
+                tag_names = image.tags,
+                thumbnails_generated = image.thumbnails_generated,
+                updated_at = image.updated_at.time,
+                uploader = image.uploader,
+                uploader_id = image.uploader_id,
+                upvotes = image.upvotes,
+                view_url = image.view_url,
+                width = image.width,
+                wilson_score = image.wilson_score,
+            )
+        }
     }
 }

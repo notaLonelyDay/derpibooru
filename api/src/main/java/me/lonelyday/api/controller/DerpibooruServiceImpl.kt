@@ -6,11 +6,10 @@ import me.lonelyday.api.models.*
 import retrofit2.HttpException
 
 class DerpibooruServiceImpl(
-    private val api: DerpibooruApi
+    private val api: DerpibooruApi,
+    private val getFilterId: () -> Int?,
+    private val getKey: () -> String?,
 ) : DerpibooruService {
-
-    override var filterId: Int? = null
-    override var key: String? = null
 
     override suspend fun featuredImage() = api.featuredImage()
 
@@ -20,8 +19,8 @@ class DerpibooruServiceImpl(
         perPage: Int
     ): SearchImagesResponse {
         return api.searchImages(
-            key = key,
-            filterId = filterId,
+            key = getKey(),
+            filterId = getFilterId(),
             page = page,
             perPage = perPage,
             query = query.toString(),
@@ -43,7 +42,7 @@ class DerpibooruServiceImpl(
     }
 
     override suspend fun fetchFiltersUser(page: Int?): FiltersResponse {
-        return api.fetchFiltersUser(key = key, page = page)
+        return api.fetchFiltersUser(key = getKey(), page = page)
     }
 
     override suspend fun checkKey(key: String, page: Int?): Boolean {

@@ -3,11 +3,7 @@ package me.lonelyday.api.interfaces
 import me.lonelyday.api.models.*
 
 interface DerpibooruService {
-    var filterId: Int?
-    var key: String?
-
     suspend fun featuredImage(): FeaturedImageResponse
-
 
     suspend fun searchImages(
         query: Query,
