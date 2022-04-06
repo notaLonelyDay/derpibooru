@@ -1,4 +1,4 @@
-package me.lonelyday.derpibooru.ui.search
+package me.lonelyday.derpibooru.ui.screen.search
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.*
 import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.repository.Repository
+import me.lonelyday.derpibooru.ui.search.SearchQueryFragment
+import me.lonelyday.derpibooru.ui.search.SearchQueryFragment.Companion.DEFAULT_QUERY
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,10 +25,12 @@ class SearchViewModel @Inject constructor(
         const val KEY_QUERY = "query"
     }
 
+    val query: Query
+        get() = savedStateHandle[KEY_QUERY]!!
+
     init {
-        repo.refresh()
         if (!savedStateHandle.contains(KEY_QUERY)) {
-            savedStateHandle.set<Query>(KEY_QUERY, SearchQueryFragment.DEFAULT_QUERY)
+            savedStateHandle.set<Query>(KEY_QUERY, DEFAULT_QUERY)
         }
     }
 

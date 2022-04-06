@@ -14,19 +14,19 @@ class RestController(
     private val baseUrl: String
 ) {
 
-    fun getService(): DerpibooruService {
-        val moshi = Moshi.Builder()
-            .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
-            .build()
-        val moshiFactory = MoshiConverterFactory.create(moshi)
-
-        val derpibooruApi = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(moshiFactory)
-            .client(httpClient)
-            .build()
-            .create(DerpibooruApi::class.java)
-
-        return DerpibooruServiceImpl(derpibooruApi)
-    }
+//    fun getService(): DerpibooruService {
+//        val moshi = Moshi.Builder()
+//            .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
+//            .build()
+//        val moshiFactory = MoshiConverterFactory.create(moshi)
+//
+//        val derpibooruApi = Retrofit.Builder()
+//            .baseUrl(baseUrl)
+//            .addConverterFactory(moshiFactory)
+//            .client(httpClient)
+//            .build()
+//            .create(DerpibooruApi::class.java)
+//
+//        return DerpibooruServiceImpl(derpibooruApi)
+//    }
 }

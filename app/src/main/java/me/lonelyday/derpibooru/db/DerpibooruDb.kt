@@ -11,6 +11,8 @@ import me.lonelyday.derpibooru.db.dao.TagDao
 import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.db.vo.Tag
 import okhttp3.MediaType.Companion.toMediaType
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -76,5 +78,15 @@ object Converters {
         Types.newParameterizedType(kotlin.collections.Map::class.java, kotlin.String::class.java, kotlin.String::class.java)
         val adapter = moshi.adapter<kotlin.collections.Map<kotlin.String, kotlin.String>>(type)
         return adapter.toJson(list)
+    }
+
+    @TypeConverter
+    fun fromLocalDateTime(value: LocalDateTime): Long {
+        return value.toEpochSecond(ZoneOffset.UTC)
+    }
+
+    @TypeConverter
+    fun toLocalDateTime(value: Long): LocalDateTime {
+        return LocalDateTime.ofEpochSecond(value, 0, ZoneOffset.UTC)
     }
 }

@@ -10,7 +10,12 @@ import me.lonelyday.derpibooru.ui.screen.search.SearchScreen
 @Composable
 fun NavigationScreen(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "search"){
-        composable("search") { SearchScreen(navController = navController) }
+    NavHost(navController = navController, startDestination = NavDest.SEARCH.n){
+        composable(NavDest.SEARCH.n) { SearchScreen(navController = navController) }
     }
+}
+
+// todo: remove n
+enum class NavDest(val n: String) {
+    SEARCH("search")
 }

@@ -9,9 +9,6 @@ import javax.inject.Inject
 class PreferencesViewModel @Inject constructor(
     private val repo: Repository
 ) : ViewModel() {
-    init {
-        repo.refresh()
-    }
 
     suspend fun checkKey(key: String): Boolean {
         return repo.checkKey(key)
