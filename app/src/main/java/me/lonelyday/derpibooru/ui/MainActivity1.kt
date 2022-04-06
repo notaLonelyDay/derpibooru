@@ -18,7 +18,7 @@ import me.lonelyday.derpibooru.databinding.ActivityMainBinding
 import me.lonelyday.derpibooru.ui.search.SearchQuerySharedViewModel
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity1 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 

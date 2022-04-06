@@ -1,7 +1,7 @@
 package me.lonelyday.derpibooru.ui.search
 
 
-import me.lonelyday.derpibooru.ui.download.DownloadManager
+//import me.lonelyday.derpibooru.ui.download.DownloadManager
 import android.os.Bundle
 import android.view.*
 import androidx.core.view.isVisible
@@ -31,10 +31,10 @@ class SearchFragment : Fragment() {
     private val viewModel by viewModels<SearchViewModel>()
     private val querySharedViewModel by activityViewModels<SearchQuerySharedViewModel>()
 
-    private lateinit var adapter: ImagesAdapter
+//    private lateinit var adapter: ImagesAdapter
 
-    @Inject
-    lateinit var downloadManager: DownloadManager
+//    @Inject
+//    lateinit var downloadManager: DownloadManager
 
     lateinit var searchBottomSheet: BottomSheetDialogFragment
 
@@ -87,26 +87,26 @@ class SearchFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        adapter = ImagesAdapter(downloadManager, this)
-        binding.recyclerList.adapter = adapter.withLoadStateHeaderAndFooter(
-            header = SearchLoadStateAdapter(adapter),
-            footer = SearchLoadStateAdapter(adapter)
-        )
-        binding.swipeRefresh.setOnRefreshListener { adapter.refresh() }
-
-        lifecycleScope.launchWhenCreated {
-            adapter.loadStateFlow.collectLatest { loadStates ->
-                binding.swipeRefresh.isRefreshing = loadStates.refresh is LoadState.Loading
-            }
-        }
-
-        lifecycleScope.launchWhenCreated {
-            viewModel.images.collectLatest {
-                adapter.submitData(it)
-            }
-        }
-
-
+//        adapter = ImagesAdapter(downloadManager, this)
+//        binding.recyclerList.adapter = adapter.withLoadStateHeaderAndFooter(
+//            header = SearchLoadStateAdapter(adapter),
+//            footer = SearchLoadStateAdapter(adapter)
+//        )
+//        binding.swipeRefresh.setOnRefreshListener { adapter.refresh() }
+//
+//        lifecycleScope.launchWhenCreated {
+//            adapter.loadStateFlow.collectLatest { loadStates ->
+//                binding.swipeRefresh.isRefreshing = loadStates.refresh is LoadState.Loading
+//            }
+//        }
+//
+//        lifecycleScope.launchWhenCreated {
+//            viewModel.images.collectLatest {
+//                adapter.submitData(it)
+//            }
+//        }
+//
+//
 //        binding.recyclerList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 //                super.onScrolled(recyclerView, dx, dy)

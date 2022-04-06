@@ -1,6 +1,5 @@
 package me.lonelyday.derpibooru.di
 
-import me.lonelyday.derpibooru.ui.download.DownloadManager
 import android.content.Context
 import androidx.preference.PreferenceManager
 import androidx.room.Room
@@ -23,7 +22,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 import javax.inject.Singleton
-import com.tonyodev.fetch2.FetchConfiguration
 
 
 
@@ -97,16 +95,16 @@ object AppModule {
         ).build()
     }
 
-    @Singleton
-    @Provides
-    fun provideDownloadManager(
-        @ApplicationContext appContext: Context
-    ): DownloadManager {
-        val fetchConfiguration: FetchConfiguration = FetchConfiguration.Builder(appContext)
-            .setDownloadConcurrentLimit(3)
-            .build()
-
-        return DownloadManager(appContext, fetchConfiguration)
-    }
+//    @Singleton
+//    @Provides
+//    fun provideDownloadManager(
+//        @ApplicationContext appContext: Context
+//    ): DownloadManager {
+//        val fetchConfiguration: FetchConfiguration = FetchConfiguration.Builder(appContext)
+//            .setDownloadConcurrentLimit(3)
+//            .build()
+//
+//        return DownloadManager(appContext, fetchConfiguration)
+//    }
 
 }
