@@ -117,20 +117,20 @@ data class ImageRepresentations(
     val full: String?,
 ){
 
-    fun getImageRepresentation(repr: Representation): String? {
-        return when(repr) {
-            Representation.THUMB_TINY -> thumb_tiny
-            Representation.THUMB_SMALL -> thumb_small
-            Representation.THUMB -> thumb
-            Representation.TALL -> tall
-            Representation.SMALL -> small
-            Representation.MEDIUM -> medium
-            Representation.LARGE -> large
-            Representation.FULL -> full
+    fun getUrlBySize(size: Size): String? {
+        return when (size) {
+            Size.THUMB_TINY -> thumb_tiny
+            Size.THUMB_SMALL -> thumb_small
+            Size.THUMB -> thumb
+            Size.TALL -> tall
+            Size.SMALL -> small
+            Size.MEDIUM -> medium
+            Size.LARGE -> large
+            Size.FULL -> full
         }
     }
 
-    enum class Representation {
+    enum class Size {
         THUMB_TINY,
         THUMB_SMALL,
         THUMB,
