@@ -22,11 +22,13 @@ import com.google.accompanist.flowlayout.FlowRow
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.db.vo.ImageWithTags
 import me.lonelyday.derpibooru.db.vo.Tag
+import me.lonelyday.derpibooru.util.extractArtistName
+import me.lonelyday.derpibooru.util.filterArtistTags
 
 @Composable
 fun ImageWithTagsItem(image: ImageWithTags) {
     Column {
-        ArtistsList(image = image)
+        ArtistsList(tags = filterArtistTags(image.tags))
         ImageRaw(image = image)
         ImageRating(image = image)
         Tags(tags = image.tags) // todo add onclick
@@ -35,10 +37,13 @@ fun ImageWithTagsItem(image: ImageWithTags) {
 
 @Composable
 fun ArtistsList(tags: List<Tag>) {
-    Row(modifier = Modifier.horizontalScroll(ScrollState(0), false)) {
-//        for (artist in image.tag_names) {
-//            Text(modifier = Modifier.padding(3.dp), text = artist)
-//        }
+    Row(
+        modifier = Modifier
+            .horizontalScroll(ScrollState(0), true)
+    ) {
+        for (tag in tags) {
+            TagItem(text = tag.extractArtistName(), backgroundColor = Color.Black, foregroundColor = Color.Gray)
+        }
     }
 }
 
@@ -79,9 +84,11 @@ fun Tags(
     tags: List<Tag>,
     onTagClick: (Tag) -> Unit = {}
 ) {
-    FlowRow(modifier = Modifier.padding(horizontal = 3.dp)) {
+    FlowRow(
+        mainAxisSpacing = 0.dp,
+        modifier = Modifier.padding(0.dp)) {
         tags.forEach {
-            TagItem(tag = it, backgroundColor = Color.Cyan, foregroundColor =Color.White)
+            TagItem(text = it.name, backgroundColor = Color.Cyan, foregroundColor = Color.White, onClick = { onTagClick(it) })
         }
     }
 }
@@ -89,21 +96,21 @@ fun Tags(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TagItem(
-    tag: Tag,
+    text: String,
     backgroundColor: Color,
     foregroundColor: Color,
-    onTagClick: (Tag) -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Card(
         shape = RoundedCornerShape(40.dp),
-        onClick = { onTagClick(tag) }
+        onClick = { onClick() }
     ) {
         Text(
             modifier = Modifier
                 .background(color = backgroundColor)
                 .padding(vertical = 1.dp, horizontal = 6.dp),
             color = foregroundColor,
-            text = tag.name
+            text = text
         )
     }
 }
@@ -112,10 +119,7 @@ fun TagItem(
 @Composable
 fun TagItemPreview() {
     TagItem(
-        tag = Tag(
-            id = 1,
-            name = "test"
-        ),
+        "test",
         Color.Red,
         Color.Black
     )
