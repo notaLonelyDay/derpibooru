@@ -13,11 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.google.accompanist.flowlayout.FlowRow
 import com.skydoves.landscapist.glide.GlideImage
 import me.lonelyday.derpibooru.R
@@ -33,7 +31,7 @@ fun ImageWithTagsItem(image: ImageWithTags) {
     Column {
         ArtistsList(tags = filterArtistTags(image.tags))
         ImageRaw(image = image.image)
-        ImageRating(image = image)
+        ImageRating(image = image.image)
         Tags(tags = image.tags) // todo add onclick
     }
 }
@@ -77,7 +75,6 @@ fun ArtistsListPreview() {
 
 @Composable
 fun ImageRaw(image: Image) {
-    val imagePainter: Painter = painterResource(id = R.drawable.ic_menu_gallery)
     GlideImage(
         imageModel = image.representations.getUrlBySize(ImageRepresentations.Size.TALL),
         modifier = Modifier.fillMaxWidth(),
@@ -85,11 +82,14 @@ fun ImageRaw(image: Image) {
 }
 
 @Composable
-fun ImageRating(image: ImageWithTags) {
+fun ImageRating(image: Image) {
     Row {
-        Text(text = "300")
-        Text(text = "300")
-        Text(text = "300")
+        Image(painterResource(R.drawable.ic_round_favorite),"")
+        Text(text = image.faves.toString())
+        Image(painterResource(R.drawable.ic_round_arrow_up),"")
+        Text(text = image.upvotes.toString())
+        Image(painterResource(R.drawable.ic_arrow_down),"")
+        Text(text = image.downvotes.toString())
     }
 }
 
