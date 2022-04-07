@@ -1,7 +1,6 @@
 package me.lonelyday.derpibooru.db.vo
 
 import androidx.room.*
-import com.squareup.moshi.Json
 import me.lonelyday.api.models.ImageModel
 import me.lonelyday.derpibooru.util.toLocalDateTime
 import java.time.LocalDateTime
@@ -116,7 +115,32 @@ data class ImageRepresentations(
     val large: String?,
     @ColumnInfo(name = "full")
     val full: String?,
-)
+){
+
+    fun getImageRepresentation(repr: Representation): String? {
+        return when(repr) {
+            Representation.THUMB_TINY -> thumb_tiny
+            Representation.THUMB_SMALL -> thumb_small
+            Representation.THUMB -> thumb
+            Representation.TALL -> tall
+            Representation.SMALL -> small
+            Representation.MEDIUM -> medium
+            Representation.LARGE -> large
+            Representation.FULL -> full
+        }
+    }
+
+    enum class Representation {
+        THUMB_TINY,
+        THUMB_SMALL,
+        THUMB,
+        TALL,
+        SMALL,
+        MEDIUM,
+        LARGE,
+        FULL
+    }
+}
 
 fun Map<String, String>.toImageRepresentations(): ImageRepresentations {
     return ImageRepresentations(
