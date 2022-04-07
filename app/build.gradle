@@ -72,6 +72,7 @@ dependencies {
 
 
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    implementation 'androidx.compose.runtime:runtime-rxjava2:1.2.0-alpha07'
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.4.0'
     // Compose Material Design

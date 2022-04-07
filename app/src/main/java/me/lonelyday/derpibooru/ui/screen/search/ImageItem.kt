@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.db.vo.Image
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Composable
 fun ImageItem(image: Image) {
@@ -58,14 +59,14 @@ fun ImageItemPreview() {
         animated = false,
         aspectRatio = 1f,
         commentCount = 1231231,
-        createdAt = LocalDateTime.ofEpochSecond(123123, 0, null),
+        createdAt = LocalDateTime.ofEpochSecond(123123, 0, ZoneOffset.UTC),
         deletion_reason = "asd asd",
         description = "description",
         downvotes = 1231231,
         duplicate_of = 1231231,
         duration = 1231231f,
         faves = 1231231,
-        first_seen_at = LocalDateTime.ofEpochSecond(123123, 0, null),
+        first_seen_at = LocalDateTime.ofEpochSecond(123123, 0, ZoneOffset.UTC),
         format = "png",
         height = 1231231,
         hidden_from_users = false,

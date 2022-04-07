@@ -8,7 +8,7 @@ import me.lonelyday.derpibooru.ui.screen.search.SearchScreen
 
 
 @Composable
-fun NavigationScreen(){
+fun GlobalNavigationScreen(){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = NavDest.SEARCH.n){
         composable(NavDest.SEARCH.n) { SearchScreen(navController = navController) }

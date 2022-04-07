@@ -17,4 +17,7 @@ interface TagDao {
 
     @Query("SELECT * FROM tags WHERE id=:id")
     suspend fun load(id: Int): Tag?
+
+    @Query("SELECT * FROM tags WHERE id in (:ids)")
+    suspend fun loadMany(vararg ids: List<Int>): List<Tag>
 }

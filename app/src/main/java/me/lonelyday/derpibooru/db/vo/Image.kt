@@ -1,16 +1,11 @@
 package me.lonelyday.derpibooru.db.vo
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import kotlinx.parcelize.Parcelize
-import me.lonelyday.api.models.ImageModel
+import androidx.room.Relation
 import java.time.LocalDateTime
-import java.util.*
 
-@Parcelize
 @Entity
 data class Image(
     @PrimaryKey
@@ -42,59 +37,16 @@ data class Image(
     @ColumnInfo(name = "size") val size: Int,
     @ColumnInfo(name = "source_url") val source_url: String?,
     @ColumnInfo(name = "spoilered") val spoilered: Boolean,
-    @ColumnInfo(name = "tag_count") val tag_count: Int,
-    @ColumnInfo(name = "tag_ids") val tag_ids: List<Int>,
-    @ColumnInfo(name = "tag_names") val tag_names: List<String>,
+
     @ColumnInfo(name = "thumbnails_generated") val thumbnails_generated: Boolean,
-    @ColumnInfo(name = "updated_at") val updated_at: Long,
+    @ColumnInfo(name = "updated_at") val updated_at: LocalDateTime,
     @ColumnInfo(name = "uploader") val uploader: String?,
     @ColumnInfo(name = "uploader_id") val uploader_id: Int?,
     @ColumnInfo(name = "upvotes") val upvotes: Int,
     @ColumnInfo(name = "view_url") val view_url: String,
     @ColumnInfo(name = "width") val width: Int,
     @ColumnInfo(name = "wilson_score") val wilson_score: Float,
-) : Parcelable {
-    @Ignore
-    var tags: List<Tag> = emptyList()
-}
 
-fun ImageModel.toImage(): Image {
-    return Image(
-        id = this.id,
-        animated = this.animated,
-        aspectRatio = this.aspectRatio,
-        commentCount = this.commentCount,
-        createdAt = LocalDateTime.ofEpochSecond(this.createdAt, 0, null),
-        deletion_reason = this.deletionReason,
-        description = this.description,
-        downvotes = this.downvotes,
-        duplicate_of = this.duplicate_of,
-        duration = this.duration,
-        faves = this.faves,
-        first_seen_at = LocalDateTime.ofEpochSecond(this.first_seen_at, 0, null),
-        format = this.format,
-        height = this.height,
-        hidden_from_users = this.hidden_from_users,
-        mime_type = this.mime_type,
-        name = this.name,
-        orig_sha512_hash = this.orig_sha512_hash,
-        processed = this.processed,
-        representations = this.representations,
-        score = this.score,
-        sha512_hash = this.sha512_hash,
-        size = this.size,
-        source_url = this.source_url,
-        spoilered = this.spoilered,
-        tag_count = this.tag_count,
-        tag_ids = this.tag_ids,
-        tag_names = this.tags,
-        thumbnails_generated = this.thumbnails_generated,
-        updated_at = this.updated_at.time,
-        uploader = this.uploader,
-        uploader_id = this.uploader_id,
-        upvotes = this.upvotes,
-        view_url = this.view_url,
-        width = this.width,
-        wilson_score = this.wilson_score,
-    )
-}
+    @Relation(parentColumn = "id", entityColumn = "id")
+    @ColumnInfo(name = "tags") val tags: List<Tag>,
+)

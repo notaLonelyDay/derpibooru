@@ -11,10 +11,9 @@ import me.lonelyday.api.models.SearchTagsResponse
 import me.lonelyday.derpibooru.db.DerpibooruDb
 import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.db.vo.Tag
-import me.lonelyday.derpibooru.db.vo.toImage
 import me.lonelyday.derpibooru.db.vo.toTag
 import me.lonelyday.derpibooru.repository.paging.NetworkSearchImagesPagingSource
-import java.time.LocalDateTime
+import me.lonelyday.derpibooru.util.toLocalDateTime
 
 open class Repository(
     private val database: DerpibooruDb,
@@ -22,7 +21,7 @@ open class Repository(
     private val settingsRepository: SettingsRepository
 ) {
 
-    suspend fun featuredImage() = service.featuredImage().image.toImage()
+    suspend fun featuredImage() = Mapper().map(service.featuredImage().image)
 
     fun searchImagesPaging(query: Query): Flow<PagingData<Image>> = Pager(
         PagingConfig(
@@ -43,20 +42,10 @@ open class Repository(
     ): List<Image> {
         val response = service.searchImages(query, page, perPage)
         return response.images.map {
-            val image = it.toImage()
-//            addTags(image)
+            val image = Mapper().map(it)
 
             image
         }
-    }
-
-    // adds tags to image using loadTag
-    private suspend fun addTags(image: Image) {
-        val tagsList = emptyList<Tag>().toMutableList()
-        for ((id, name) in image.tag_ids.zip(image.tag_names)) {
-            loadTag(id, name)?.let { tagsList.add(it) }
-        }
-        image.tags = tagsList
     }
 
     suspend fun checkKey(key: String): Boolean {
@@ -84,20 +73,28 @@ open class Repository(
 
     // TODO use it
     inner class Mapper {
-        fun map(image: ImageModel): Image {
+        suspend fun map(image: ImageModel): Image {
+            val tagsFromDb = database.tagDao().loadMany(image.tag_ids)
+            val tags = image.tag_ids.zip(image.tags).map { (id, name) ->
+                tagsFromDb.firstOrNull { it.id == id }
+                    ?: Tag(
+                        id = id,
+                        name = name,
+                    )
+            }
             return Image(
                 id = image.id,
                 animated = image.animated,
                 aspectRatio = image.aspectRatio,
                 commentCount = image.commentCount,
-                createdAt = LocalDateTime.ofEpochSecond(image.createdAt, 0, null),
+                createdAt = image.createdAt.toLocalDateTime(),
                 deletion_reason = image.deletionReason,
                 description = image.description,
                 downvotes = image.downvotes,
                 duplicate_of = image.duplicate_of,
                 duration = image.duration,
                 faves = image.faves,
-                first_seen_at = LocalDateTime.ofEpochSecond(image.first_seen_at, 0, null),
+                first_seen_at = image.first_seen_at.toLocalDateTime(),
                 format = image.format,
                 height = image.height,
                 hidden_from_users = image.hidden_from_users,
@@ -111,11 +108,9 @@ open class Repository(
                 size = image.size,
                 source_url = image.source_url,
                 spoilered = image.spoilered,
-                tag_count = image.tag_count,
-                tag_ids = image.tag_ids,
-                tag_names = image.tags,
+                tags = tags,
                 thumbnails_generated = image.thumbnails_generated,
-                updated_at = image.updated_at.time,
+                updated_at = image.updated_at.time.toLocalDateTime(),
                 uploader = image.uploader,
                 uploader_id = image.uploader_id,
                 upvotes = image.upvotes,
