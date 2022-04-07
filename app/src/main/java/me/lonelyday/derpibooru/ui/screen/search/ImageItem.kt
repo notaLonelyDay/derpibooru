@@ -1,17 +1,27 @@
 package me.lonelyday.derpibooru.ui.screen.search
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowRow
 import me.lonelyday.derpibooru.R
 import me.lonelyday.derpibooru.db.vo.ImageWithTags
+import me.lonelyday.derpibooru.db.vo.Tag
 
 @Composable
 fun ImageWithTagsItem(image: ImageWithTags) {
@@ -19,17 +29,33 @@ fun ImageWithTagsItem(image: ImageWithTags) {
         ArtistsList(image = image)
         ImageRaw(image = image)
         ImageRating(image = image)
+        Tags(tags = image.tags) // todo add onclick
     }
 }
 
 @Composable
-fun ArtistsList(image: ImageWithTags) {
-    Row {
-        for (artist in image.tag_names) {
-            Text(modifier = Modifier.padding(3.dp), text = artist)
-        }
+fun ArtistsList(tags: List<Tag>) {
+    Row(modifier = Modifier.horizontalScroll(ScrollState(0), false)) {
+//        for (artist in image.tag_names) {
+//            Text(modifier = Modifier.padding(3.dp), text = artist)
+//        }
     }
 }
+
+@Preview
+@Composable
+fun ArtistsListPreview() {
+    ArtistsList(tags = listOf(
+        Tag(id = 1, name = "artist:hiroshiru"),
+        Tag(id = 2, name = "artist:kazuki"),
+        Tag(id = 3, name = "artist:almux"),
+        Tag(id = 3, name = "artist:almux"),
+        Tag(id = 3, name = "artist:almux"),
+        Tag(id = 3, name = "artist:almux"),
+        Tag(id = 3, name = "artist:almux"),
+    ))
+}
+
 
 @Composable
 fun ImageRaw(image: ImageWithTags) {
@@ -45,6 +71,68 @@ fun ImageRating(image: ImageWithTags) {
         Text(text = "300")
         Text(text = "300")
     }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun Tags(
+    tags: List<Tag>,
+    onTagClick: (Tag) -> Unit = {}
+) {
+    FlowRow(modifier = Modifier.padding(horizontal = 3.dp)) {
+        tags.forEach {
+            TagItem(tag = it, backgroundColor = Color.Cyan, foregroundColor =Color.White)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun TagItem(
+    tag: Tag,
+    backgroundColor: Color,
+    foregroundColor: Color,
+    onTagClick: (Tag) -> Unit = {}
+) {
+    Card(
+        shape = RoundedCornerShape(40.dp),
+        onClick = { onTagClick(tag) }
+    ) {
+        Text(
+            modifier = Modifier
+                .background(color = backgroundColor)
+                .padding(vertical = 1.dp, horizontal = 6.dp),
+            color = foregroundColor,
+            text = tag.name
+        )
+    }
+}
+
+@Preview
+@Composable
+fun TagItemPreview() {
+    TagItem(
+        tag = Tag(
+            id = 1,
+            name = "test"
+        ),
+        Color.Red,
+        Color.Black
+    )
+}
+
+@Preview
+@Composable
+fun TagsPreview() {
+    Tags(
+        listOf(
+            Tag(id = 1, name = "tag1"),
+            Tag(id = 2, name = "tag2"),
+            Tag(id = 3, name = "tag3"),
+            Tag(id = 4, name = "tag4"),
+            Tag(id = 5, name = "tag5"),
+        )
+    )
 }
 
 

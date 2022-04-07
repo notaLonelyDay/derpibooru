@@ -32,8 +32,8 @@ fun SearchScreen(
         )
         val imagesWithTags = viewModel.imagesWithTags.collectAsLazyPagingItems()
         LazyColumn {
-            items(images, {it.image.id}) { imageWithTags ->
-                Text(text = "")
+            items(imagesWithTags, {it.image.id}) { imageWithTags ->
+                imageWithTags?.let { ImageWithTagsItem(image = it) }
             }
         }
     }
