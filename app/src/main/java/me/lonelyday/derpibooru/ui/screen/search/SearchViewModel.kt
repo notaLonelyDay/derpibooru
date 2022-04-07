@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.db.vo.Image
+import me.lonelyday.derpibooru.db.vo.ImageWithTags
 import me.lonelyday.derpibooru.repository.Repository
 import me.lonelyday.derpibooru.ui.search.SearchQueryFragment
 import me.lonelyday.derpibooru.ui.search.SearchQueryFragment.Companion.DEFAULT_QUERY
@@ -32,8 +33,8 @@ class SearchViewModel @Inject constructor(
     }
 
     private val clearListCh = Channel<Unit>(Channel.CONFLATED)
-    val images = flowOf(
-        clearListCh.receiveAsFlow().map { PagingData.empty<Image>() },
+    val imagesWithTags = flowOf(
+        clearListCh.receiveAsFlow().map { PagingData.empty<ImageWithTags>() },
         savedStateHandle.getLiveData<Query>(KEY_QUERY)
             .asFlow()
             .debounce(500) // todo

@@ -9,15 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import me.lonelyday.derpibooru.R
-import me.lonelyday.derpibooru.db.vo.Image
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import me.lonelyday.derpibooru.db.vo.ImageWithTags
 
 @Composable
-fun ImageItem(image: Image) {
+fun ImageWithTagsItem(image: ImageWithTags) {
     Column {
         ArtistsList(image = image)
         ImageRaw(image = image)
@@ -26,7 +23,7 @@ fun ImageItem(image: Image) {
 }
 
 @Composable
-fun ArtistsList(image: Image) {
+fun ArtistsList(image: ImageWithTags) {
     Row {
         for (artist in image.tag_names) {
             Text(modifier = Modifier.padding(3.dp), text = artist)
@@ -35,14 +32,14 @@ fun ArtistsList(image: Image) {
 }
 
 @Composable
-fun ImageRaw(image: Image) {
+fun ImageRaw(image: ImageWithTags) {
     val imagePainter: Painter = painterResource(id = R.drawable.ic_menu_gallery)
     Image(painter = imagePainter, contentDescription = "")
 
 }
 
 @Composable
-fun ImageRating(image: Image) {
+fun ImageRating(image: ImageWithTags) {
     Row {
         Text(text = "300")
         Text(text = "300")
@@ -51,46 +48,46 @@ fun ImageRating(image: Image) {
 }
 
 
-@Preview
-@Composable
-fun ImageItemPreview() {
-    val image = Image(
-        id = 1231231,
-        animated = false,
-        aspectRatio = 1f,
-        commentCount = 1231231,
-        createdAt = LocalDateTime.ofEpochSecond(123123, 0, ZoneOffset.UTC),
-        deletion_reason = "asd asd",
-        description = "description",
-        downvotes = 1231231,
-        duplicate_of = 1231231,
-        duration = 1231231f,
-        faves = 1231231,
-        first_seen_at = LocalDateTime.ofEpochSecond(123123, 0, ZoneOffset.UTC),
-        format = "png",
-        height = 1231231,
-        hidden_from_users = false,
-        mime_type = "png",
-        name = "name",
-        orig_sha512_hash = "asdasdasd",
-        processed = true,
-        representations = mapOf(),
-        score = 1231231,
-        sha512_hash = "asdasdasdas",
-        size = 1231231,
-        source_url = "zxczxczx",
-        spoilered = false,
-        tag_count = 1231231,
-        tag_ids = listOf(1231231),
-        tag_names = listOf("asdasd", "zxczxc"),
-        thumbnails_generated = true,
-        updated_at = 1231231,
-        uploader = "zxczxc",
-        uploader_id = 1231231,
-        upvotes = 1231231,
-        view_url = "zxczxc",
-        width = 1231231,
-        wilson_score = 1231231f
-    )
-    ImageItem(image = image)
-}
+//@Preview
+//@Composable
+//fun ImageItemPreview() {
+//    val image = Image(
+//        id = 1231231,
+//        animated = false,
+//        aspectRatio = 1f,
+//        commentCount = 1231231,
+//        createdAt = LocalDateTime.ofEpochSecond(123123, 0, ZoneOffset.UTC),
+//        deletion_reason = "asd asd",
+//        description = "description",
+//        downvotes = 1231231,
+//        duplicate_of = 1231231,
+//        duration = 1231231f,
+//        faves = 1231231,
+//        first_seen_at = LocalDateTime.ofEpochSecond(123123, 0, ZoneOffset.UTC),
+//        format = "png",
+//        height = 1231231,
+//        hidden_from_users = false,
+//        mime_type = "png",
+//        name = "name",
+//        orig_sha512_hash = "asdasdasd",
+//        processed = true,
+//        representations = mapOf(),
+//        score = 1231231,
+//        sha512_hash = "asdasdasdas",
+//        size = 1231231,
+//        source_url = "zxczxczx",
+//        spoilered = false,
+//        tag_count = 1231231,
+//        tag_ids = listOf(1231231),
+//        tag_names = listOf("asdasd", "zxczxc"),
+//        thumbnails_generated = true,
+//        updated_at = 1231231,
+//        uploader = "zxczxc",
+//        uploader_id = 1231231,
+//        upvotes = 1231231,
+//        view_url = "zxczxc",
+//        width = 1231231,
+//        wilson_score = 1231231f
+//    )
+//    ImageItem(image = image)
+//}

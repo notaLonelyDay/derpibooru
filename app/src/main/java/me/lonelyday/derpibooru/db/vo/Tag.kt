@@ -2,6 +2,7 @@ package me.lonelyday.derpibooru.db.vo
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import me.lonelyday.api.models.TagModel
 

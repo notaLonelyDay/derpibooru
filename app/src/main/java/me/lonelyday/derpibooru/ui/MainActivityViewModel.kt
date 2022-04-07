@@ -18,7 +18,7 @@ class MainActivityViewModel @Inject constructor(
     fun loadFeaturedImage(): LiveData<Image> {
         val liveData = MutableLiveData<Image>()
         viewModelScope.launch {
-            liveData.value = repo.featuredImage()
+//            liveData.value = repo.featuredImage()
         }
         return liveData
     }
