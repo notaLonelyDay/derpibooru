@@ -17,19 +17,22 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.google.accompanist.flowlayout.FlowRow
+import com.skydoves.landscapist.glide.GlideImage
 import me.lonelyday.derpibooru.R
+import me.lonelyday.derpibooru.db.vo.Image
+import me.lonelyday.derpibooru.db.vo.ImageRepresentations
 import me.lonelyday.derpibooru.db.vo.ImageWithTags
 import me.lonelyday.derpibooru.db.vo.Tag
 import me.lonelyday.derpibooru.util.extractArtistName
 import me.lonelyday.derpibooru.util.filterArtistTags
-import java.time.LocalDateTime
 
 @Composable
 fun ImageWithTagsItem(image: ImageWithTags) {
     Column {
         ArtistsList(tags = filterArtistTags(image.tags))
-        ImageRaw(image = image)
+        ImageRaw(image = image.image)
         ImageRating(image = image)
         Tags(tags = image.tags) // todo add onclick
     }
@@ -73,10 +76,12 @@ fun ArtistsListPreview() {
 
 
 @Composable
-fun ImageRaw(image: ImageWithTags) {
+fun ImageRaw(image: Image) {
     val imagePainter: Painter = painterResource(id = R.drawable.ic_menu_gallery)
-    Image(painter = imagePainter, contentDescription = "")
-
+    GlideImage(
+        imageModel = image.representations.getUrlBySize(ImageRepresentations.Size.TALL),
+        modifier = Modifier.fillMaxWidth(),
+    )
 }
 
 @Composable
