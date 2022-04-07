@@ -100,7 +100,9 @@ object AppModule {
             appContext,
             DerpibooruDb::class.java,
             "database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
 //    @Singleton

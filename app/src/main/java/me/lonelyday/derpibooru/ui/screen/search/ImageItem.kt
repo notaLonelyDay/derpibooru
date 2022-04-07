@@ -4,14 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -24,6 +23,7 @@ import me.lonelyday.derpibooru.db.vo.ImageWithTags
 import me.lonelyday.derpibooru.db.vo.Tag
 import me.lonelyday.derpibooru.util.extractArtistName
 import me.lonelyday.derpibooru.util.filterArtistTags
+import java.time.LocalDateTime
 
 @Composable
 fun ImageWithTagsItem(image: ImageWithTags) {
@@ -36,13 +36,23 @@ fun ImageWithTagsItem(image: ImageWithTags) {
 }
 
 @Composable
-fun ArtistsList(tags: List<Tag>) {
+fun ArtistsList(
+    tags: List<Tag>,
+    onClick: (Tag) -> Unit = {}
+) {
     Row(
         modifier = Modifier
-            .horizontalScroll(ScrollState(0), true)
+            .horizontalScroll(ScrollState(0), true),
     ) {
+        Text(modifier = Modifier.align(Alignment.CenterVertically), text = "Artist: ")
         for (tag in tags) {
-            TagItem(text = tag.extractArtistName(), backgroundColor = Color.Black, foregroundColor = Color.Gray)
+            TagItem(
+                text = tag.extractArtistName(),
+                backgroundColor = Color.Black,
+                foregroundColor = Color.Gray,
+                onClick = { onClick(tag) },
+            )
+            Spacer(modifier = Modifier.width(5.dp))
         }
     }
 }
@@ -85,8 +95,10 @@ fun Tags(
     onTagClick: (Tag) -> Unit = {}
 ) {
     FlowRow(
+        crossAxisSpacing = 0.dp,
         mainAxisSpacing = 0.dp,
-        modifier = Modifier.padding(0.dp)) {
+        modifier = Modifier.padding(0.dp)
+    ) {
         tags.forEach {
             TagItem(text = it.name, backgroundColor = Color.Cyan, foregroundColor = Color.White, onClick = { onTagClick(it) })
         }

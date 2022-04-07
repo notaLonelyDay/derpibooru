@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
 
 @Database(
     entities = [Image::class, Tag::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class DerpibooruDb : RoomDatabase() {
@@ -48,7 +48,7 @@ object Converters {
     @TypeConverter
     fun intFromString(value: String): List<Int> {
         val moshi = Moshi.Builder().build()
-        val type = Types.newParameterizedType(List::class.java, Int::class.java)
+        val type = Types.newParameterizedType(List::class.java, Int::class.javaObjectType)
         val adapter = moshi.adapter<List<Int>>(type)
         return adapter.fromJson(value) ?: emptyList()
     }
@@ -56,7 +56,7 @@ object Converters {
     @TypeConverter
     fun intFromList(list: List<Int>): String {
         val moshi = Moshi.Builder().build()
-        val type = Types.newParameterizedType(List::class.java, Int::class.java)
+        val type = Types.newParameterizedType(List::class.java, Int::class.javaObjectType)
         val adapter = moshi.adapter<List<Int>>(type)
         return adapter.toJson(list)
     }

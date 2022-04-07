@@ -54,7 +54,7 @@ class MainActivity1 : AppCompatActivity() {
             val image =
                 binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.headerImage)
 
-            Glide.with(this).load(it.representations["large"]).into(image)
+//            Glide.with(this).load(it.representations["large"]).into(image)
         }
     }
 }
