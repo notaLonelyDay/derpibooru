@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import me.lonelyday.derpibooru.ui.GlobalNavHost
@@ -16,6 +17,9 @@ import me.lonelyday.derpibooru.ui.theme.DerpibooruTheme
 fun MainScreen() {
     DerpibooruTheme {
 
+        val viewModel = hiltViewModel<MainScreenViewModel>()
+        val featuredImage by viewModel.featuredImageWithTags.collectAsState()
+        LaunchedEffect(key1 = null, block = { viewModel.loadFeaturedImage() })
         val navController = rememberNavController()
         val scaffoldState = rememberScaffoldState()
         val scope = rememberCoroutineScope()
@@ -33,7 +37,7 @@ fun MainScreen() {
             },
             topBar = {
                 TopAppBar(
-                    title = { Text(currentNavDest.navName) },
+                    title = { Text(currentNavDest.appBarName) },
                     navigationIcon = {
                         IconButton(onClick = {
                             scope.launch {
@@ -47,7 +51,7 @@ fun MainScreen() {
                     }
                 )
             },
-            drawerContent = { NavDrawer(navController, currentNavDest) },
+            drawerContent = { NavDrawer(navController, currentNavDest, featuredImage = featuredImage?.image) },
         )
     }
 }

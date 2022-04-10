@@ -28,9 +28,18 @@ fun GlobalNavHost(
 //todo migrate navName to strings.xml
 enum class NavDest(
     val localName: String,
-    val navName: String
+    val appBarName: String,
+    val drawerName: String = appBarName,
+    val isTopLevelDest: Boolean = false
 ) {
-    SEARCH("search", "Derpibooru");
+
+    SEARCH(
+        localName = "search",
+        appBarName = "Derpibooru",
+        drawerName = "Search",
+        isTopLevelDest = true
+    );
+
     companion object {
         val startDest = SEARCH
     }

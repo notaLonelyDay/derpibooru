@@ -20,6 +20,7 @@ import androidx.paging.compose.items
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import me.lonelyday.api.models.Query
 import me.lonelyday.derpibooru.ui.search.SearchQueryFragment.Companion.DEFAULT_QUERY
 
 @Composable
@@ -30,24 +31,11 @@ fun SearchScreen(
 
     Column {
         val query by viewModel.query.collectAsState(initial = DEFAULT_QUERY)
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = query.string,
-            trailingIcon = {
-                Icon(
-                    Icons.Filled.Clear,
-                    contentDescription = "clear text",
-                    modifier = Modifier
-                        .offset(x = 10.dp)
-                        .clickable {
-                            viewModel.submitQuery(query.copy(string = ""))
-                        }
-                )
-            },
-            onValueChange = {
-                viewModel.submitQuery(query.copy(string = it))
-            }
-        )
+        QueryScreen(query = query, onQueryChanged = {
+            viewModel.submitQuery(it)
+        })
+
+
         val imagesWithTags = viewModel.imagesWithTags.collectAsLazyPagingItems()
         var isRefreshing by remember { mutableStateOf(false) }
         SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing), onRefresh = { imagesWithTags.refresh() }) {
@@ -72,6 +60,22 @@ fun SearchScreen(
 }
 
 @Composable
-fun QueryScreen() {
-
+fun QueryScreen(
+    query: Query,
+    onQueryChanged: (Query) -> Unit
+) {
+    TextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = query.string,
+        trailingIcon = {
+            Icon(
+                Icons.Filled.Clear,
+                contentDescription = "clear text",
+                modifier = Modifier
+                    .offset(x = 10.dp)
+                    .clickable { onQueryChanged(query.copy(string = "")) }
+            )
+        },
+        onValueChange = { onQueryChanged(query.copy(string = it)) }
+    )
 }
