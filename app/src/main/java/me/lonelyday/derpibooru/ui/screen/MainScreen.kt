@@ -51,7 +51,20 @@ fun MainScreen() {
                     }
                 )
             },
-            drawerContent = { NavDrawer(navController, currentNavDest, featuredImage = featuredImage?.image) },
+            drawerContent = {
+                NavDrawer(
+                    navController = navController,
+                    currentNavDest = currentNavDest,
+                    featuredImage = featuredImage?.image,
+                    onItemClicked = {
+                        if(navController.currentDestination?.route != it.navName)
+                            navController.navigate(it.navName)
+                        scope.launch {
+                            scaffoldState.drawerState.close()
+                        }
+                    }
+                )
+            },
         )
     }
 }
