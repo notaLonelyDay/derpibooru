@@ -44,7 +44,7 @@ class SearchViewModel @Inject constructor(
 
     fun submitQuery(query: Query) {
         if (savedStateHandle.get<Query>(KEY_QUERY) != query) {
-            clearListCh.trySend(Unit).isSuccess
+//            clearListCh.trySend(Unit).isSuccess
             savedStateHandle.set<Query>(KEY_QUERY, query)
         }
     }

@@ -1,7 +1,7 @@
 package me.lonelyday.derpibooru.ui.screen.search
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import android.util.Log
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -33,27 +33,24 @@ fun SearchScreen(
             }
         )
         val imagesWithTags = viewModel.imagesWithTags.collectAsLazyPagingItems()
-        var isRefreshing by remember { mutableStateOf(false) }
+        var isRefreshing by remember { mutableStateOf(true) }
         SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing), onRefresh = { imagesWithTags.refresh() }) {
-
             LazyColumn {
-                items(imagesWithTags, { it.image.id }) { imageWithTags ->
-                    imageWithTags?.let { ImageWithTagsItem(image = it) }
+                if (imagesWithTags.itemCount != 0) {
+                    items(imagesWithTags, { it.image.id }) { imageWithTags ->
+                        imageWithTags?.let { ImageWithTagsItem(image = it) }
+                    }
+                } else {
+                    item { Text("No results", Modifier.fillParentMaxSize()) }
                 }
+
+
             }
 
-            imagesWithTags.apply {
-                when {
-                    loadState.refresh is LoadState.Loading -> {
-                        isRefreshing = true
-                    }
-                    loadState.append is LoadState.Loading -> {
-                    }
-                    loadState.refresh is LoadState.Error -> {
-                    }
-                    loadState.append is LoadState.Error -> {
-                    }
-                }
+            isRefreshing = when (imagesWithTags.loadState.refresh) {
+                is LoadState.Loading -> true
+                is LoadState.NotLoading -> false
+                is LoadState.Error -> false
             }
         }
     }
