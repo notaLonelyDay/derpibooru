@@ -1,4 +1,4 @@
-package me.lonelyday.derpibooru.ui
+package me.lonelyday.derpibooru.ui.screen
 
 import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
