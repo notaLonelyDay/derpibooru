@@ -1,21 +1,37 @@
 package me.lonelyday.derpibooru.ui
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import me.lonelyday.derpibooru.ui.screen.search.SearchScreen
 
 
 @Composable
-fun GlobalNavigationScreen(){
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = NavDest.SEARCH.n){
-        composable(NavDest.SEARCH.n) { SearchScreen(navController = navController) }
+fun GlobalNavHost(
+    navController: NavHostController,
+    onNavDestChanged: (NavDest) -> Unit
+) {
+    var currentDest by remember { mutableStateOf(NavDest.SEARCH) }
+    NavHost(navController = navController, startDestination = NavDest.startDest.localName) {
+        composable(NavDest.SEARCH.localName) {
+            currentDest = NavDest.SEARCH
+            SearchScreen(navController = navController)
+        }
     }
+
+    LaunchedEffect(key1 = currentDest, block = {
+        onNavDestChanged(currentDest)
+    })
 }
 
-// todo: remove n
-enum class NavDest(val n: String) {
-    SEARCH("search")
+//todo migrate navName to strings.xml
+enum class NavDest(
+    val localName: String,
+    val navName: String
+) {
+    SEARCH("search", "Derpibooru");
+    companion object {
+        val startDest = SEARCH
+    }
 }

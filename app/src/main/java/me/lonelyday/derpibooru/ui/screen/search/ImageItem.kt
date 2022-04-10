@@ -25,6 +25,8 @@ import me.lonelyday.derpibooru.db.vo.ImageWithTags
 import me.lonelyday.derpibooru.db.vo.Tag
 import me.lonelyday.derpibooru.util.extractArtistName
 import me.lonelyday.derpibooru.util.filterArtistTags
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Composable
 fun ImageWithTagsItem(image: ImageWithTags) {
@@ -33,6 +35,7 @@ fun ImageWithTagsItem(image: ImageWithTags) {
         ImageRaw(image = image.image)
         ImageRating(image = image.image)
         Tags(tags = image.tags) // todo add onclick
+        ImageDescription(image = image.image)
     }
 }
 
@@ -58,7 +61,7 @@ fun ArtistsList(
     }
 }
 
-@Preview
+//@Preview
 @Composable
 fun ArtistsListPreview() {
     ArtistsList(tags = listOf(
@@ -132,7 +135,7 @@ fun TagItem(
     }
 }
 
-@Preview
+//@Preview
 @Composable
 fun TagItemPreview() {
     TagItem(
@@ -142,7 +145,7 @@ fun TagItemPreview() {
     )
 }
 
-@Preview
+//@Preview
 @Composable
 fun TagsPreview() {
     Tags(
@@ -156,47 +159,83 @@ fun TagsPreview() {
     )
 }
 
+@Composable
+fun ImageDescription(image: Image) {
+    Column {
+        Row {
+            image.uploader?.let {
+                Text(text = it)
+            }
+            Text(text = "${image.createdAt?.toString()} ")
+            Text(text = "${image.width}x${image.height} ${image.format} ${image.size}")
+        }
+        Row {
+            Text(text = "Source: ")
+            image.source_url?.let { Text(text = it) }
+        }
+        Text(text = image.description)
+    }
+}
 
-//@Preview
-//@Composable
-//fun ImageItemPreview() {
-//    val image = Image(
-//        id = 1231231,
-//        animated = false,
-//        aspectRatio = 1f,
-//        commentCount = 1231231,
-//        createdAt = LocalDateTime.ofEpochSecond(123123, 0, ZoneOffset.UTC),
-//        deletion_reason = "asd asd",
-//        description = "description",
-//        downvotes = 1231231,
-//        duplicate_of = 1231231,
-//        duration = 1231231f,
-//        faves = 1231231,
-//        first_seen_at = LocalDateTime.ofEpochSecond(123123, 0, ZoneOffset.UTC),
-//        format = "png",
-//        height = 1231231,
-//        hidden_from_users = false,
-//        mime_type = "png",
-//        name = "name",
-//        orig_sha512_hash = "asdasdasd",
-//        processed = true,
-//        representations = mapOf(),
-//        score = 1231231,
-//        sha512_hash = "asdasdasdas",
-//        size = 1231231,
-//        source_url = "zxczxczx",
-//        spoilered = false,
-//        tag_count = 1231231,
-//        tag_ids = listOf(1231231),
-//        tag_names = listOf("asdasd", "zxczxc"),
-//        thumbnails_generated = true,
-//        updated_at = 1231231,
-//        uploader = "zxczxc",
-//        uploader_id = 1231231,
-//        upvotes = 1231231,
-//        view_url = "zxczxc",
-//        width = 1231231,
-//        wilson_score = 1231231f
-//    )
-//    ImageItem(image = image)
-//}
+@Composable
+@Preview
+fun ImageItemPreview() {
+    val imageWithTags = ImageWithTags(
+        image = Image(
+            id = 1,
+            source_url = "https://derpibooru.org/images/1",
+            description = "description",
+            upvotes = 1,
+            downvotes = 1,
+            faves = 1,
+            representations = ImageRepresentations(
+                small = "https://derpibooru.org/images/1/small",
+                large = "https://derpibooru.org/images/1/large",
+                thumb = "https://derpibooru.org/images/1/thumb",
+                tall = "https://derpicdn.net/img/view/2022/4/8/2842165.jpg",
+                full = "https://derpibooru.org/images/1/full",
+                medium = "https://derpibooru.org/images/1/medium",
+                thumb_small = "https://derpibooru.org/images/1/thumb_small",
+                thumb_tiny = "https://derpibooru.org/images/1/thumb_tiny",
+            ),
+            animated = false,
+            aspectRatio = 1.0f,
+            commentCount = 1,
+            createdAt = LocalDateTime.ofEpochSecond(100000, 0, ZoneOffset.UTC),
+            first_seen_at = LocalDateTime.ofEpochSecond(100000, 0, ZoneOffset.UTC),
+            updated_at = LocalDateTime.ofEpochSecond(100000, 0, ZoneOffset.UTC),
+            deletion_reason = null,
+            wilson_score = 123f,
+            duplicate_of = null,
+            duration = 0f,
+            format = "png",
+            height = 2000,
+            hidden_from_users = false,
+            width = 1000,
+            mime_type = "image/png",
+            name = "name",
+            orig_sha512_hash = "orig_sha512_hash",
+            processed = true,
+            score = 1,
+            sha512_hash = "sha512_hash",
+            size = 256000,
+            spoilered = false,
+            tag_count = 1,
+            tag_ids = listOf(1),
+            tag_names = listOf("tag1"),
+            thumbnails_generated = true,
+            uploader = "uploader",
+            uploader_id = 1,
+            view_url = "view_url"
+        ),
+        tags = listOf(
+            Tag(id = 1, name = "tag1"),
+            Tag(id = 2, name = "tag2"),
+            Tag(id = 3, name = "tag3"),
+            Tag(id = 4, name = "tag4"),
+            Tag(id = 5, name = "tag5"),
+        )
+    )
+
+    ImageWithTagsItem(imageWithTags)
+}

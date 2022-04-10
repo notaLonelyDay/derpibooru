@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
 
 @Database(
     entities = [Image::class, Tag::class],
-    version = 2
+    version = 33
 )
 @TypeConverters(Converters::class)
 abstract class DerpibooruDb : RoomDatabase() {
