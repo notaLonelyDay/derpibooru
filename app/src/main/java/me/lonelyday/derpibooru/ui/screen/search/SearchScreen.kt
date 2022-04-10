@@ -33,7 +33,7 @@ fun SearchScreen(
             }
         )
         val imagesWithTags = viewModel.imagesWithTags.collectAsLazyPagingItems()
-        var isRefreshing by remember { mutableStateOf(true) }
+        var isRefreshing by remember { mutableStateOf(false) }
         SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing), onRefresh = { imagesWithTags.refresh() }) {
             LazyColumn {
                 if (imagesWithTags.itemCount != 0) {
@@ -46,7 +46,6 @@ fun SearchScreen(
 
 
             }
-
             isRefreshing = when (imagesWithTags.loadState.refresh) {
                 is LoadState.Loading -> true
                 is LoadState.NotLoading -> false

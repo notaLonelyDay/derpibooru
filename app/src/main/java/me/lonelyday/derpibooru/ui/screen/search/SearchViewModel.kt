@@ -37,7 +37,7 @@ class SearchViewModel @Inject constructor(
         clearListCh.receiveAsFlow().map { PagingData.empty<ImageWithTags>() },
         savedStateHandle.getLiveData<Query>(KEY_QUERY)
             .asFlow()
-            .debounce(500) // todo
+            .debounce(500)
             .flatMapLatest { repo.searchImagesPaging(it) }
             .cachedIn(viewModelScope)
     ).flattenMerge(2)
