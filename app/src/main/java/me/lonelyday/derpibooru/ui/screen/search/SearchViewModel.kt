@@ -1,20 +1,19 @@
 package me.lonelyday.derpibooru.ui.screen.search
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import me.lonelyday.api.models.Query
-import me.lonelyday.derpibooru.db.vo.Image
 import me.lonelyday.derpibooru.db.vo.ImageWithTags
 import me.lonelyday.derpibooru.repository.Repository
 import me.lonelyday.derpibooru.repository.SettingsRepository
-import me.lonelyday.derpibooru.ui.search.SearchQueryFragment
-import me.lonelyday.derpibooru.ui.search.SearchQueryFragment.Companion.DEFAULT_QUERY
 import javax.inject.Inject
-import kotlin.time.DurationUnit
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(

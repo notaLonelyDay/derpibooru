@@ -115,5 +115,5 @@ fun Filters(){
 @Preview
 @Composable
 fun QueryScreenPreview() {
-    QueryScreen(query = Query("Cleartext"), onQueryChanged = {})
+//    QueryScreen(query = Query("Cleartext"), onQueryChanged = {})
 }
