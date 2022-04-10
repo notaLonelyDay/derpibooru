@@ -1,12 +1,17 @@
 package me.lonelyday.derpibooru.ui.screen.search
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
@@ -28,6 +33,17 @@ fun SearchScreen(
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = query.string,
+            trailingIcon = {
+                Icon(
+                    Icons.Filled.Clear,
+                    contentDescription = "clear text",
+                    modifier = Modifier
+                        .offset(x = 10.dp)
+                        .clickable {
+                            viewModel.submitQuery(query.copy(string = ""))
+                        }
+                )
+            },
             onValueChange = {
                 viewModel.submitQuery(query.copy(string = it))
             }

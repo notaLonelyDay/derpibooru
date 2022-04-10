@@ -74,6 +74,9 @@ val nav_version = "2.3.5"
 val room_version = "2.3.0"
 dependencies {
     implementation("com.github.skydoves:landscapist-glide:1.5.1")
+    implementation("com.github.JamalMulla:ComposePrefs:1.0.2")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 
 
     implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")

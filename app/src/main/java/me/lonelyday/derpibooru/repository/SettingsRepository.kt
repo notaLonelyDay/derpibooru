@@ -2,6 +2,7 @@ package me.lonelyday.derpibooru.repository
 
 import android.content.SharedPreferences
 import me.lonelyday.derpibooru.DEFAULT_PAGE_SIZE
+import javax.inject.Inject
 
 class SettingsRepository(
     private val sharedPreferences: SharedPreferences
