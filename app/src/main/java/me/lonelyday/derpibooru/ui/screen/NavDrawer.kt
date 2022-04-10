@@ -11,7 +11,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.skydoves.landscapist.glide.GlideImage
 import me.lonelyday.derpibooru.db.vo.Image
-import me.lonelyday.derpibooru.ui.NavDest
 
 @Composable
 fun NavDrawer(

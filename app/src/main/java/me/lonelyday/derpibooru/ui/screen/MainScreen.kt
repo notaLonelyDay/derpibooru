@@ -9,8 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import me.lonelyday.derpibooru.ui.GlobalNavHost
-import me.lonelyday.derpibooru.ui.NavDest
 import me.lonelyday.derpibooru.ui.theme.DerpibooruTheme
 
 @Composable
@@ -48,7 +46,7 @@ fun MainScreen() {
                         }) {
                             Icon(Icons.Filled.Menu, "")
                         }
-                    }
+                    },
                 )
             },
             drawerContent = {

@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import me.lonelyday.derpibooru.ui.screen.search.SearchScreen
+import me.lonelyday.derpibooru.ui.screen.settings.SettingsScreen
 
 
 @Composable
@@ -17,6 +18,10 @@ fun GlobalNavHost(
         composable(NavDest.SEARCH.navName) {
             currentDest = NavDest.SEARCH
             SearchScreen(navController = navController)
+        }
+        composable(NavDest.SETTINGS.navName) {
+            currentDest = NavDest.SETTINGS
+            SettingsScreen()
         }
     }
 
