@@ -5,6 +5,10 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
+    kotlin("android")
+    kotlin("kapt")
+    kotlin("plugin.serialization") version Dependencies.Kotlin.version
+
 }
 
 repositories {
@@ -76,6 +80,7 @@ dependencies {
     implementation("com.github.skydoves:landscapist-glide:1.5.1")
     implementation("com.github.JamalMulla:ComposePrefs:1.0.2")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
 
 
@@ -91,7 +96,7 @@ dependencies {
     // Compose Material Design
     implementation("androidx.compose.material:material:1.1.1")
     // Animations
-    implementation("androidx.compose.animation:animation:1.1.1")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
     // Tooling support (Previews, etc.)
     implementation("androidx.compose.ui:ui-tooling:1.1.1")
     // Integration with ViewModels
@@ -138,10 +143,13 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
 
 
-    val hilt_version = "2.38.1"
+    val hilt_version = "2.41"
 
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-compiler:$hilt_version")
+    kapt("com.google.dagger:hilt-android:$hilt_version")
+
+
 
 
     implementation("com.github.bumptech.glide:glide:4.12.0")

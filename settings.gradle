@@ -3,3 +3,8 @@ include ':app'
 include ':api'
 include ':core'
 
+dependencyResolutionManagement {
+    repositories {
+        google()
+    }
+}

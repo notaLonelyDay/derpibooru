@@ -8,10 +8,16 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import android.graphics.drawable.Drawable
+import me.lonelyday.api.models.Query
+import me.lonelyday.api.models.SortDirection
+import me.lonelyday.api.models.SortField
 
 
-
-
+val INITIAL_QUERY = Query(
+    "safe",
+    sortField = SortField.WilsonScore,
+    sortDirection = SortDirection.Descending
+)
 
 const val BASE_URL = "https://derpibooru.org/api/v1/json/"
 

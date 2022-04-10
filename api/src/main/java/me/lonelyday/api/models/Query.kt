@@ -1,10 +1,14 @@
 package me.lonelyday.api.models
 
+import kotlinx.serialization.*
+
+
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
+@Serializable
 data class Query(
     val string: String,
     val sortField: SortField? = null,
@@ -22,7 +26,8 @@ enum class SortField(
     Id("id", "image ID"),
     UpdatedAt("updated_at", "last modification date"),
     FirstSeenAt("first_seen_at", "initial post date"),
-    AspectRatio("aspect_ratio", "aspect ratio")
+    AspectRatio("aspect_ratio", "aspect ratio"),
+    WilsonScore("wilson_score", "Wilson score"),
     // TODO continue
 }
 

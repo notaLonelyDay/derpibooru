@@ -22,7 +22,7 @@ import me.lonelyday.derpibooru.ui.createDefaultQuery
 class SearchQueryFragment : BottomSheetDialogFragment() {
 
     companion object{
-        val DEFAULT_QUERY = createDefaultQuery()
+//        val DEFAULT_QUERY = createDefaultQuery()
     }
 
     private var _binding: FragmentSearchQueryBinding? = null
@@ -44,7 +44,7 @@ class SearchQueryFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.queryText.setText("safe")
-        querySharedViewModel.query.value = DEFAULT_QUERY
+//        querySharedViewModel.query.value = DEFAULT_QUERY
 
         binding.queryText.addTextChangedListener{
             querySharedViewModel.query.value = Query(it.toString())

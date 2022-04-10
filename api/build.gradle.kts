@@ -5,6 +5,8 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
+    kotlin("kapt")
+    kotlin("plugin.serialization") version Dependencies.Kotlin.version
 }
 
 repositories {
@@ -77,6 +79,8 @@ dependencies {
     implementation("com.google.accompanist:accompanist-swiperefresh:$accompanistVersion")
 
     implementation("androidx.paging:paging-compose:1.0.0-alpha14")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("androidx.compose.runtime:runtime-rxjava2:1.2.0-alpha07")

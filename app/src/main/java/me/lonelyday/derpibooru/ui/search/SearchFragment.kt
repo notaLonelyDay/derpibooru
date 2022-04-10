@@ -122,6 +122,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun submitQuery(query: Query) {
-        viewModel.submitQuery(query)
+        viewModel.searchByQuery(query)
     }
 }
