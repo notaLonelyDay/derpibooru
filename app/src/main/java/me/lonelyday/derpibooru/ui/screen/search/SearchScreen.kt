@@ -5,14 +5,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import me.lonelyday.derpibooru.ui.search.SearchQueryFragment.Companion.DEFAULT_QUERY
 
 @Composable
@@ -31,9 +33,27 @@ fun SearchScreen(
             }
         )
         val imagesWithTags = viewModel.imagesWithTags.collectAsLazyPagingItems()
-        LazyColumn {
-            items(imagesWithTags, {it.image.id}) { imageWithTags ->
-                imageWithTags?.let { ImageWithTagsItem(image = it) }
+        var isRefreshing by remember { mutableStateOf(false) }
+        SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing), onRefresh = { imagesWithTags.refresh() }) {
+
+            LazyColumn {
+                items(imagesWithTags, { it.image.id }) { imageWithTags ->
+                    imageWithTags?.let { ImageWithTagsItem(image = it) }
+                }
+            }
+
+            imagesWithTags.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        isRefreshing = true
+                    }
+                    loadState.append is LoadState.Loading -> {
+                    }
+                    loadState.refresh is LoadState.Error -> {
+                    }
+                    loadState.append is LoadState.Error -> {
+                    }
+                }
             }
         }
     }
