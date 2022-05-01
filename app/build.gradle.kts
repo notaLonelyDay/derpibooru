@@ -82,6 +82,8 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
+    implementation("com.github.alorma:compose-settings-ui:0.7.2")
+
 
 
     implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")

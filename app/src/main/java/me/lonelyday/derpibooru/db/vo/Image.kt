@@ -27,7 +27,7 @@ data class Image(
     // TODO: what is intensities
 //    @ColumnInfo(name = "intensities") val intensities: Object?,
     @ColumnInfo(name = "mime_type") val mime_type: String?,
-    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "orig_sha512_hash") val orig_sha512_hash: String?,
     @ColumnInfo(name = "processed") val processed: Boolean,
     @Embedded val representations: ImageRepresentations,
