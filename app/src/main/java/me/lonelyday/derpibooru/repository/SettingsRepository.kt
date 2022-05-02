@@ -1,6 +1,7 @@
 package me.lonelyday.derpibooru.repository
 
 import android.content.SharedPreferences
+import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.lonelyday.api.models.Query
@@ -13,8 +14,10 @@ class SettingsRepository(
     val pageSize: Int
         get() = sharedPreferences.getInt("page_size", DEFAULT_PAGE_SIZE)
 
-    val key: String?
-        get() = sharedPreferences.getString("key", null)
+
+    var key: String?
+        get() = sharedPreferences.getString(KEY_KEY, null)
+        set(value) = sharedPreferences.edit().putString(KEY_KEY, value).apply()
 
     val filterId: Int?
         get() = sharedPreferences.getString("filter_id", null)?.toInt()
@@ -37,5 +40,6 @@ class SettingsRepository(
 
     private companion object {
         const val LAST_SEARCH_QUERY_KEY = "last_search_query"
+        const val KEY_KEY = "key"
     }
 }

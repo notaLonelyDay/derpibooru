@@ -1,45 +1,62 @@
 package me.lonelyday.derpibooru.ui.screen.settings
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alorma.compose.settings.ui.SettingsMenuLink
-import com.jamal.composeprefs.ui.PrefsScreen
-import com.jamal.composeprefs.ui.prefs.TextPref
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Preview
-fun SettingsScreen() {
+fun SettingsScreen(
+    settingsViewModel: SettingsViewModel = hiltViewModel()
+) {
+    val key by settingsViewModel.key.collectAsState()
+    SettingsMenuClickable(title = "ApiKey", text = key, onConfirm = { settingsViewModel.setKey(it) })
+}
 
-    var openedDialog by remember { mutableStateOf(false) }
-
-    SettingsMenuLink(title = { Text(text = "Title") }) {
-        openedDialog = true
+@Composable
+fun SettingsMenuClickable(
+    title: String,
+    text: String,
+    onConfirm: (String) -> Unit
+) {
+    val isDialogShown = remember { mutableStateOf(false) }
+    SettingsMenuLink(title = { Text(text = title) }) {
+        isDialogShown.value = true
     }
+    if (isDialogShown.value) {
+        var dialogText by remember { mutableStateOf(text) }
 
-    if (openedDialog) {
         AlertDialog(
-            title = { Text(text = "ASdasd") },
             text = {
-                TextField(value = "asdasd", onValueChange = {})
+                OutlinedTextField(
+                    value = dialogText,
+                    onValueChange = { dialogText = it },
+                    label = { Text(title) }
+                )
             },
-            onDismissRequest = {
-                openedDialog = false
+            onDismissRequest = { isDialogShown.value = false },
+            dismissButton = {
+                Button(onClick = { isDialogShown.value = false }) {
+                    Text(text = "Cancel")
+                }
             },
             confirmButton = {
-                Button(onClick = { /*TODO*/ }) {
-
+                Button(onClick = {
+                    onConfirm(dialogText)
+                    isDialogShown.value = false
+                }) {
+                    Text(text = "Confirm")
                 }
             }
         )
     }
+
+}
+
+@Composable
+fun EditableDialog(
+) {
+
 }
